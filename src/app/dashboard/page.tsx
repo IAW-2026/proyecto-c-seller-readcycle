@@ -45,7 +45,6 @@ export default function ProductsPage() {
     <Box bg="brand.beige" minH="100vh" py="12">
       <Container maxW="1200px">
         
-        {/* Encabezado Aesthetic */}
         <Stack gap="3" mb="12" textAlign={{ base: "center", md: "left" }}>
           <Heading 
             as="h1" 
