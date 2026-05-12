@@ -32,7 +32,7 @@ export default function CreateBookPage() {
 
 
   // SUBMIT
-  const handleCreate = (data: {
+  const handleCreate = async (data: {
     title: string
     description: string
     price: number
@@ -42,7 +42,17 @@ export default function CreateBookPage() {
     categoryId: number
   }) => {
 
-    console.log("Creando libro...", data)
+    const response = await fetch("/api/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+
+  const result = await response.json()
+
+  console.log(result)
   }
 
 
