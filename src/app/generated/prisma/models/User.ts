@@ -247,7 +247,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -259,7 +259,7 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -295,7 +295,7 @@ export type UserUncheckedUpdateInput = {
 }
 
 export type UserCreateManyInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -404,7 +404,7 @@ export type UserUpdateOneRequiredWithoutAddressNestedInput = {
 }
 
 export type UserCreateWithoutProductsInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -415,7 +415,7 @@ export type UserCreateWithoutProductsInput = {
 }
 
 export type UserUncheckedCreateWithoutProductsInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -464,7 +464,7 @@ export type UserUncheckedUpdateWithoutProductsInput = {
 }
 
 export type UserCreateWithoutOrdersInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -475,7 +475,7 @@ export type UserCreateWithoutOrdersInput = {
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -524,7 +524,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
 }
 
 export type UserCreateWithoutAddressInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
@@ -535,7 +535,7 @@ export type UserCreateWithoutAddressInput = {
 }
 
 export type UserUncheckedCreateWithoutAddressInput = {
-  id: string
+  id?: string
   clerkUserId: string
   name: string
   surname: string
