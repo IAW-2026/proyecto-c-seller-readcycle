@@ -33,8 +33,8 @@ export default function BookCard({
   const router = useRouter()
   
   async function handleDelete() {
-  const confirmDelete = confirm(`¿Estás seguro de eliminar este libro?`)
-  if (!confirmDelete) return
+    const confirmDelete = confirm(`¿Estás seguro de eliminar este libro?`)
+    if (!confirmDelete) return
     try {
       await fetch(`/api/products?id=${id}`, { method: "DELETE" })
       window.location.reload()
@@ -101,6 +101,7 @@ export default function BookCard({
           color="brand.beige"
           borderRadius="xl"
           fontWeight="600"
+          onClick={() => router.push(`/dashboard/${id}/edit`)} 
           _hover={{
             bg: "brand.sage"
           }}

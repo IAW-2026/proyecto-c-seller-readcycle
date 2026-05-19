@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import {
   Box,
@@ -45,6 +45,14 @@ interface BookFormProps {
     weight: number
     categoryId: string
   }) => void
+  initialData?: {
+    title: string
+    description: string
+    price: number
+    stock: number
+    weight: number
+    categoryId: string
+  }
 }
 
 const emptyForm: BookFormData = {
@@ -55,13 +63,27 @@ const emptyForm: BookFormData = {
   weight: "",
   categoryId: ""
 }
+
 export const BookForm = ({
   categories,
-  onSubmit
+  onSubmit,
+  initialData
 }: BookFormProps) => {
-  const [formData, setFormData] = useState<BookFormData>(
-    emptyForm
-  )
+  const [formData, setFormData] = useState<BookFormData>(emptyForm)
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || "",
+        description: initialData.description || "",
+        price: initialData.price?.toString() ?? "",    
+        stock: initialData.stock?.toString() ?? "1",   
+        weight: initialData.weight?.toString() ?? "0", 
+        categoryId: initialData.categoryId || ""
+      })
+    }
+  }, [initialData])
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement |
@@ -89,6 +111,7 @@ export const BookForm = ({
       categoryId: formData.categoryId
     })
   }
+
   const focusStyles = {
     _focusVisible: {
       borderColor: "brand.sage",
@@ -108,6 +131,7 @@ export const BookForm = ({
       }
     }
   }
+
   return (
     <VStack gap={6} align="stretch">
       <Box
@@ -244,7 +268,6 @@ export const BookForm = ({
                       >
                         {category.name}
                       </option>
-
                     ))}
                   </NativeSelect.Field>
                 </NativeSelect.Root>
@@ -294,7 +317,7 @@ export const BookForm = ({
         onClick={handleSubmit}
       >
         <Icon as={LuSend} mr={2} />
-        Publicar libro
+        {initialData ? "Guardar cambios" : "Publicar libro"} 
       </Button>
     </VStack>
   )

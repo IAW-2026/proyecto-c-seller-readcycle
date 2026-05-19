@@ -79,8 +79,11 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) { 
   try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
     const { userId } = await auth()
 
     if (!userId) {
@@ -102,7 +105,23 @@ export async function GET() {
         { status: 404 }
       )
     }
+    if (id) {
+      const product = await prisma.product.findFirst({
+        where: {
+          id: id,
+          sellerId: dbUser.id, // Seguridad: Que sea del usuario logueado
+        },
+      })
 
+      if (!product) {
+        return Response.json(
+          { error: "Product not found" },
+          { status: 404 }
+        )
+      }
+
+      return Response.json(product) // Devuelve un OBJETO único, no un array
+    }
     const products = await prisma.product.findMany({
       where: {
         sellerId: dbUser.id,
@@ -172,6 +191,71 @@ export async function DELETE(request: Request) {
       )
     }
     return Response.json({ message: "Producto eliminado exitosamente" })
+
+  } catch (error) {
+    console.error(error)
+    return Response.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+    const body = await request.json()
+
+    const { userId } = await auth()
+    if (!userId) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    if (!id) {
+      return Response.json(
+        { error: "Product ID is required" },
+        { status: 400 }
+      )
+    }
+
+    const dbUser = await prisma.user.findUnique({
+      where: {
+        clerkUserId: userId,
+      },
+    })
+
+    if (!dbUser) {
+      return Response.json(
+        { error: "User not found" },
+        { status: 404 }
+      )
+    }
+
+    const updateResult = await prisma.product.updateMany({
+      where: {
+        id: id,
+        sellerId: dbUser.id, 
+      },
+      data: {
+        title: body.title,
+        description: body.description,
+        price: body.price,
+        stock: body.stock,
+        weight: body.weight,
+        categoryId: body.categoryId,
+      },
+    })
+    if (updateResult.count === 0) {
+      return Response.json(
+        { error: "Product not found or unauthorized" },
+        { status: 404 }
+      )
+    }
+    return Response.json({ message: "Product updated successfully" })
 
   } catch (error) {
     console.error(error)
