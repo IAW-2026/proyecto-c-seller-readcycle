@@ -61,15 +61,22 @@ model Category {
 
 model Order {
   id             String    @id @default(cuid())
+
+  sellerId       String
+  seller         User   @relation(fields: [sellerId], references: [id])
+
   buyerId        String
-  buyer          User    @relation(fields: [buyerId], references: [id])
-  status         String
+
+  status         String?
   shippingStatus String?
 
-  total        Float
-  shippingCost Float
-  shippingId   String?
-  items        OrderItem[]
+  total          Float
+  shippingCost   Float
+
+  paymentId      String?
+  shippingId     String?
+
+  items          OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

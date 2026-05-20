@@ -255,7 +255,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   address?: Prisma.AddressCreateNestedOneWithoutUserInput
   products?: Prisma.ProductCreateNestedManyWithoutSellerInput
-  orders?: Prisma.OrderCreateNestedManyWithoutBuyerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutSellerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -267,7 +267,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   address?: Prisma.AddressUncheckedCreateNestedOneWithoutUserInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutSellerInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutBuyerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutSellerInput
 }
 
 export type UserUpdateInput = {
@@ -279,7 +279,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   products?: Prisma.ProductUpdateManyWithoutSellerNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutBuyerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutSellerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -291,7 +291,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   address?: Prisma.AddressUncheckedUpdateOneWithoutUserNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutSellerNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutBuyerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutSellerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -411,7 +411,7 @@ export type UserCreateWithoutProductsInput = {
   email: string
   createdAt?: Date | string
   address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  orders?: Prisma.OrderCreateNestedManyWithoutBuyerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutSellerInput
 }
 
 export type UserUncheckedCreateWithoutProductsInput = {
@@ -422,7 +422,7 @@ export type UserUncheckedCreateWithoutProductsInput = {
   email: string
   createdAt?: Date | string
   address?: Prisma.AddressUncheckedCreateNestedOneWithoutUserInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutBuyerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutSellerInput
 }
 
 export type UserCreateOrConnectWithoutProductsInput = {
@@ -449,7 +449,7 @@ export type UserUpdateWithoutProductsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutBuyerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutSellerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProductsInput = {
@@ -460,7 +460,7 @@ export type UserUncheckedUpdateWithoutProductsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   address?: Prisma.AddressUncheckedUpdateOneWithoutUserNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutBuyerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutSellerNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -531,7 +531,7 @@ export type UserCreateWithoutAddressInput = {
   email: string
   createdAt?: Date | string
   products?: Prisma.ProductCreateNestedManyWithoutSellerInput
-  orders?: Prisma.OrderCreateNestedManyWithoutBuyerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutSellerInput
 }
 
 export type UserUncheckedCreateWithoutAddressInput = {
@@ -542,7 +542,7 @@ export type UserUncheckedCreateWithoutAddressInput = {
   email: string
   createdAt?: Date | string
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutSellerInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutBuyerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutSellerInput
 }
 
 export type UserCreateOrConnectWithoutAddressInput = {
@@ -569,7 +569,7 @@ export type UserUpdateWithoutAddressInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductUpdateManyWithoutSellerNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutBuyerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutSellerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAddressInput = {
@@ -580,7 +580,7 @@ export type UserUncheckedUpdateWithoutAddressInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductUncheckedUpdateManyWithoutSellerNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutBuyerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutSellerNestedInput
 }
 
 

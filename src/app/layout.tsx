@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {ClerkProvider, Show, SignInButton, SignUpButton} from "@clerk/nextjs";
-import UserMenu from "../components/clerk-user-button";
+import UserButton from "../components/clerk-user-button";
 import { Provider } from "../components/ui/provider";
 
 const geistSans = Geist({
@@ -40,7 +40,7 @@ export default function RootLayout({
                 </SignUpButton>
               </Show>
               <Show when="signed-in">
-                <UserMenu />
+                <UserButton />
               </Show>
             </header>
             {children}
