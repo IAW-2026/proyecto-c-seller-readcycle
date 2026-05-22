@@ -24,6 +24,8 @@ interface Publication {
   category: {
     name: string
   }
+
+  images?: { url: string }[]
 }
 
 export default function ProductsPage() {
@@ -133,8 +135,8 @@ export default function ProductsPage() {
                 title={book.title}
                 description={book.description}
                 price={book.price}
+                images={book.images?.map(img => img.url) || []}
                 category={book.category.name}
-                image="/placeholder-book.jpg"
               />
             ))}
           </Grid>

@@ -44,7 +44,9 @@ export async function POST(req: Request) {
       !body.price ||
       !body.stock ||
       !body.weight ||
-      !body.categoryId
+      !body.categoryId ||
+      !body.images ||
+      body.images.length === 0
     ) {
 
       return Response.json(
@@ -62,10 +64,18 @@ export async function POST(req: Request) {
         weight: Number(body.weight),
         sellerId: dbUser.id,
         categoryId: body.categoryId,
+
+        images: {
+          create: {
+            url: body.images[0],
+            isPrimary: true,
+          },
+        },
       },
 
       include: {
         category: true,
+        images: true,
       },
     })
     return Response.json(product)
@@ -109,7 +119,15 @@ export async function GET(request: Request) {
       const product = await prisma.product.findFirst({
         where: {
           id: id,
-          sellerId: dbUser.id, // Seguridad: Que sea del usuario logueado
+          sellerId: dbUser.id, 
+        },
+        include: {
+          category: true,
+          images: {
+            orderBy: {
+              isPrimary: "desc",
+            },
+          },
         },
       })
 
@@ -126,10 +144,17 @@ export async function GET(request: Request) {
       where: {
         sellerId: dbUser.id,
       },
+
       include: {
         category: true,
-        images: true,
+
+        images: {
+          orderBy: {
+            isPrimary: "desc",
+          },
+        },
       },
+
       orderBy: {
         createdAt: "desc",
       },
@@ -235,11 +260,27 @@ export async function PUT(request: Request) {
       )
     }
 
-    const updateResult = await prisma.product.updateMany({
+    // 1. Verificamos que el producto exista y le pertenezca a este usuario
+    const existingProduct = await prisma.product.findFirst({
       where: {
         id: id,
-        sellerId: dbUser.id, 
+        sellerId: dbUser.id,
       },
+    })
+
+    if (!existingProduct) {
+      return Response.json(
+        { error: "Product not found or unauthorized" },
+        { status: 404 }
+      )
+    }
+
+    // 2. Actualizamos el producto y reemplazamos la imagen
+    await prisma.product.update({
+      where: {
+        id: id,
+      },
+
       data: {
         title: body.title,
         description: body.description,
@@ -247,14 +288,18 @@ export async function PUT(request: Request) {
         stock: body.stock,
         weight: body.weight,
         categoryId: body.categoryId,
+
+        images: {
+          deleteMany: {},
+
+          create: {
+            url: body.images[0],
+            isPrimary: true,
+          },
+        },
       },
     })
-    if (updateResult.count === 0) {
-      return Response.json(
-        { error: "Product not found or unauthorized" },
-        { status: 404 }
-      )
-    }
+
     return Response.json({ message: "Product updated successfully" })
 
   } catch (error) {

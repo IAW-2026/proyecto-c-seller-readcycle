@@ -62,6 +62,7 @@ export default function CreateBookPage() {
     stock: number
     weight: number
     categoryId: string
+    images: string[]
   }) => {
     try {
       const response = await fetch("/api/products", {

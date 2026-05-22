@@ -16,7 +16,7 @@ type BookCardProps = {
   title: string
   description: string
   price: number
-  image: string
+  images: string[]
   category: string
 }
 
@@ -25,7 +25,7 @@ export default function BookCard({
   title,
   description,
   price,
-  image,
+  images,
   category,
 }: BookCardProps) {
 
@@ -56,7 +56,7 @@ export default function BookCard({
       }}
     >
       <Image
-        src={image}
+        src={images?.[0] || "/placeholder-book.jpg"}
         alt={title}
         h="220px"
         objectFit="cover"
