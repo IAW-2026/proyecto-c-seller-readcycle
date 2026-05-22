@@ -63,106 +63,157 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const { userId } = await auth()
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const seller = await prisma.user.findUnique({
+      where: {
+        clerkUserId: userId,
+      },
+    })
+
+    if (!seller) {
+      return NextResponse.json(
+        { error: "Seller not found" },
+        { status: 404 }
+      )
+    }
+
     const body = await req.json()
 
     const {
-      sellerId,
       buyerId,
       shippingCost,
       items,
     } = body
 
-    if (!sellerId || !buyerId || !items?.length) {
+    if (!buyerId || !items?.length) {
       return NextResponse.json(
         { error: "Missing fields" },
         { status: 400 }
       )
     }
 
-    let total = 0
+    const order = await prisma.$transaction(
+      async (tx) => {
+        let total = 0
 
-    for (const item of items) {
-      const product = await prisma.product.findUnique({
-        where: {
-          id: item.productId,
-        },
-      })
-
-      if (!product) {
-        return NextResponse.json(
-          { error: `Product ${item.productId} not found` },
-          { status: 404 }
-        )
-      }
-
-      if (product.stock < item.quantity) {
-        return NextResponse.json(
-          {
-            error: `Not enough stock for ${product.title}`,
-          },
-          { status: 400 }
-        )
-      }
-
-      total += product.price * item.quantity
-    }
-
-    const order = await prisma.order.create({
-      data: {
-        sellerId,
-        buyerId,
-
-        total,
-        shippingCost,
-
-        status: "PENDING",
-        shippingStatus: "PREPARING",
-
-        items: {
-          create: await Promise.all(
-            items.map(async (item: any) => {
-              const product =
-                await prisma.product.findUnique({
-                  where: {
-                    id: item.productId,
-                  },
-                })
-
-              await prisma.product.update({
+        const validatedItems = await Promise.all(
+          items.map(async (item: any) => {
+            const product =
+              await tx.product.findUnique({
                 where: {
                   id: item.productId,
+                },
+              })
+
+            if (!product) {
+              throw new Error(
+                `Product ${item.productId} not found`
+              )
+            }
+
+            if (
+              product.stock < item.quantity
+            ) {
+              throw new Error(
+                `Not enough stock for ${product.title}`
+              )
+            }
+
+            total +=
+              product.price * item.quantity
+
+            return {
+              product,
+              quantity: item.quantity,
+            }
+          })
+        )
+
+        const createdOrder =
+          await tx.order.create({
+            data: {
+              sellerId: seller.id,
+              buyerId,
+
+              total,
+              shippingCost,
+
+              status: "PENDING",
+              shippingStatus:
+                "PREPARING",
+
+              items: {
+                create: validatedItems.map(
+                  ({
+                    product,
+                    quantity,
+                  }) => ({
+                    quantity,
+
+                    price: product.price,
+
+                    subtotal:
+                      product.price *
+                      quantity,
+
+                    productId: product.id,
+                  })
+                ),
+              },
+            },
+
+            include: {
+              items: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          })
+
+        await Promise.all(
+          validatedItems.map(
+            async ({
+              product,
+              quantity,
+            }) => {
+              await tx.product.update({
+                where: {
+                  id: product.id,
                 },
 
                 data: {
                   stock: {
-                    decrement: item.quantity,
+                    decrement: quantity,
                   },
                 },
               })
+            }
+          )
+        )
 
-              return {
-                quantity: item.quantity,
-                price: product!.price,
-                subtotal:
-                  product!.price * item.quantity,
-                productId: item.productId,
-              }
-            })
-          ),
-        },
-      },
-
-      include: {
-        items: true,
-      },
-    })
+        return createdOrder
+      }
+    )
 
     return NextResponse.json(order)
-  } catch (error) {
+  } catch (error: any) {
     console.error("[ORDERS_POST]", error)
 
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error:
+          error.message ||
+          "Internal server error",
+      },
       { status: 500 }
     )
   }
