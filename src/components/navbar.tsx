@@ -26,7 +26,7 @@ export function Navbar() {
     >
       <Container
         maxW="full" 
-        px={{ base: "4", md: "10" }} // Reducimos el 50 a 10 para que se pegue a la izquierda
+        px={{ base: "4", md: "10" }} 
       >
         <Flex
           h="20"
@@ -82,21 +82,23 @@ export function Navbar() {
               </NextLink>
             </Link>
 
-            <Button
-              variant="ghost"
-              color="brand.forest"
-              borderRadius="brand"
-              fontFamily="heading"
-              fontWeight="600"
-              px="4"
-              _hover={{ bg: "brand.sand" }}
-            >
-              Historial de ventas
-            </Button>
+            <Link asChild href="/dashboard/orders">
+              <NextLink href="/dashboard/orders">
+                <Button
+                  variant="ghost"
+                  color="brand.forest"
+                  borderRadius="brand"
+                  fontFamily="heading"
+                  fontWeight="600"
+                  px="4"
+                  _hover={{ bg: "brand.sand" }}
+                >
+                  Historial de ventas
+                </Button>
+            </NextLink>
+            </Link>
           </HStack>
-
           <Spacer />
-          
         </Flex>
       </Container>
     </Box>
