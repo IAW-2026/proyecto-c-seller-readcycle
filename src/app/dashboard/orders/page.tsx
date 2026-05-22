@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import {
   Box,
+  Button,
   Container,
   Flex,
   Heading,
@@ -57,61 +58,84 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
 
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch("/api/orders")
+
+      if (!res.ok) {
+        throw new Error(
+          "Error fetching orders"
+        )
+      }
+
+      const data = await res.json()
+
+      setOrders(data)
+    } catch (error) {
+      console.error(
+        "[ORDERS_PAGE]",
+        error
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
-    const mockOrders: Order[] = [
-      {
-        id: "order_1",
+    fetchOrders()
+  }, [])
 
-        createdAt: new Date().toISOString(),
+  const createMockOrder = async () => {
+    try {
+      const mockCart = {
+        buyerId: "buyer_test_123",
 
-        total: 15000,
         shippingCost: 3000,
-
-        status: "PAID",
-        shippingStatus: "IN_TRANSIT",
-
-        buyerId: "buyer_123",
 
         items: [
           {
-            id: "item_1",
+            productId:
+              "cmphfrv020001w4wglg5i3ztp",
 
             quantity: 1,
-            price: 12000,
-            subtotal: 12000,
+          },
 
-            product: {
-              id: "cmpeic0u90000t0wgvtdn7anx",
+          {
+            productId:
+              "cmpenol4i000480wg7lck5j6f",
 
-              title: "Clean Code",
-
-              description: "Mal libro",
-
-              stock: 2,
-
-              category: {
-                name: "Programación",
-              },
-
-              images: [
-                {
-                  id: "img_1",
-
-                  url:
-                    "https://placehold.co/300x400",
-
-                  isPrimary: true,
-                },
-              ],
-            },
+            quantity: 1,
           },
         ],
-      },
-    ]
+      }
 
-    setOrders(mockOrders)
-    setLoading(false)
-  }, [])
+      const res = await fetch("/api/orders", {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify(mockCart),
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+
+        console.log(errorData)
+
+        throw new Error(errorData.error)
+      }
+
+      await fetchOrders()
+    } catch (error) {
+      console.error(
+        "[MOCK_ORDER]",
+        error
+      )
+    }
+  }
 
   if (loading) {
     return (
@@ -149,22 +173,37 @@ export default function OrdersPage() {
 
           <Flex
             align="center"
+            justify="space-between"
             gap="4"
+            wrap="wrap"
           >
-            <Box
-              w="50px"
-              h="3px"
-              bg="brand.clay"
-              borderRadius="full"
-            />
-
-            <Text
-              color="gray.600"
-              fontSize="lg"
+            <Flex
+              align="center"
+              gap="4"
             >
-              Gestiona todas tus órdenes
-              realizadas
-            </Text>
+              <Box
+                w="50px"
+                h="3px"
+                bg="brand.clay"
+                borderRadius="full"
+              />
+
+              <Text
+                color="gray.600"
+                fontSize="lg"
+              >
+                Gestiona todas tus órdenes
+                realizadas
+              </Text>
+            </Flex>
+
+            <Button
+              bg="brand.forest"
+              color="white"
+              onClick={createMockOrder}
+            >
+              Mockear compra
+            </Button>
           </Flex>
         </Stack>
 
