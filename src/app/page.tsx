@@ -1,54 +1,162 @@
 "use client"
 
-import Image from "next/image";
-import Link from "next/link";
+import NextImage from "next/image"
+import NextLink from "next/link"
+
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Link,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F9F7F2] font-sans selection:bg-[#4A6741] selection:text-white">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -right-[5%] w-[400px] h-[400px] rounded-full bg-[#E5E0D4] blur-3xl opacity-50" />
-        <div className="absolute top-[60%] -left-[5%] w-[300px] h-[300px] rounded-full bg-[#D97757] blur-3xl opacity-20" />
-      </div>
+    <Box
+      minH="100vh"
+      bg="brand.beige"
+      position="relative"
+      overflow="hidden"
+    >
+      {/* Background blobs */}
+      <Box
+        position="absolute"
+        top="-10%"
+        right="-5%"
+        w="400px"
+        h="400px"
+        borderRadius="full"
+        bg="brand.sand"
+        filter="blur(120px)"
+        opacity={0.5}
+      />
 
-      <main className="relative flex flex-col flex-1 items-center justify-center px-6 py-20 text-center">
-        <div className="mb-12 transition-transform duration-700 hover:scale-105">
-          <Image
-            className="drop-shadow-sm"
-            src="/logo.png"
-            alt="ReadCycle logo"
-            width={350}
-            height={80}
-            priority
-          />
-        </div>
+      <Box
+        position="absolute"
+        top="60%"
+        left="-5%"
+        w="300px"
+        h="300px"
+        borderRadius="full"
+        bg="brand.clay"
+        filter="blur(120px)"
+        opacity={0.2}
+      />
 
-        <div className="flex flex-col items-center gap-8 max-w-2xl">
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.1] tracking-tight text-[#2C3A27]">
-            Tus historias merecen <br />
-            <span className="text-[#D97757]">un nuevo capítulo</span>
-          </h1>
+      <Container maxW="container.xl" minH="100vh">
+        <Flex
+          direction="column"
+          align="center"
+          justify="center"
+          textAlign="center"
+          px={6}
+          py={20}
+          minH="100vh"
+          position="relative"
+        >
+          {/* Logo */}
+          <Box
+            mb={12}
+            transition="0.7s"
+            _hover={{
+              transform: "scale(1.05)",
+            }}
+            css={{
+              filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
+            }}
+          >
+            <NextImage
+              src="/logo.png"
+              alt="ReadCycle logo"
+              width={350}
+              height={80}
+              priority
+            />
+          </Box>
 
-          <p className="max-w-lg text-lg md:text-xl leading-relaxed text-[#4A6741]/80">
-            Dales una segunda vida a los libros que ya leíste y encontrá tu próxima aventura a un precio increíble.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center">
-            <Link 
-              href="/dashboard"
-              className="flex h-14 items-center justify-center px-10 rounded-full bg-[#2C3A27] text-[#F9F7F2] font-bold text-lg transition-all hover:bg-[#4A6741] hover:shadow-lg hover:-translate-y-1 active:scale-95"
+          <Stack gap={8} align="center" maxW="700px">
+            <Heading
+              fontSize={{ base: "4xl", md: "6xl" }}
+              lineHeight="1.1"
+              fontWeight="extrabold"
+              color="brand.forest"
+              letterSpacing="tight"
             >
-              Empezar a vender
-            </Link>
-          </div>
-        </div>
+              Tus historias merecen
+              <br />
+              <Text as="span" color="brand.clay">
+                un nuevo capítulo
+              </Text>
+            </Heading>
 
-        <div className="mt-24 flex items-center gap-2 text-[#2C3A27]/40 font-medium tracking-widest uppercase text-xs">
-          <div className="w-8 h-[1px] bg-[#2C3A27]/20" />
-          Libros usados, historias nuevas
-          <div className="w-8 h-[1px] bg-[#2C3A27]/20" />
-        </div>
-      </main>
-    </div>
-  );
+            <Text
+              maxW="550px"
+              fontSize={{ base: "lg", md: "xl" }}
+              lineHeight="tall"
+              color="brand.sage"
+              opacity={0.8}
+            >
+              Dales una segunda vida a los libros que ya leíste y encontrá tu
+              próxima aventura a un precio increíble.
+            </Text>
+
+            <Flex
+              direction={{ base: "column", sm: "row" }}
+              gap={4}
+              mt={4}
+              w="full"
+              justify="center"
+            >
+              <Link asChild _hover={{ textDecoration: "none" }}>
+                <NextLink href="/dashboard">
+                  <Button
+                    size="lg"
+                    h="56px"
+                    px={10}
+                    borderRadius="full"
+                    bg="brand.forest"
+                    color="brand.beige"
+                    fontSize="lg"
+                    fontWeight="bold"
+                    transition="all 0.2s"
+                    _hover={{
+                      bg: "brand.sage",
+                      transform: "translateY(-4px)",
+                      boxShadow: "lg",
+                    }}
+                    _active={{
+                      transform: "scale(0.95)",
+                    }}
+                  >
+                    Empezar a vender
+                  </Button>
+                </NextLink>
+              </Link>
+            </Flex>
+          </Stack>
+
+          {/* Footer phrase */}
+          <Flex
+            mt={24}
+            align="center"
+            gap={2}
+            color="brand.forest"
+            opacity={0.4}
+            fontWeight="medium"
+            letterSpacing="widest"
+            textTransform="uppercase"
+            fontSize="xs"
+          >
+            <Box w={8} h="1px" bg="brand.forest" opacity={0.2} />
+            Libros usados, historias nuevas
+            <Box w={8} h="1px" bg="brand.forest" opacity={0.2} />
+          </Flex>
+        </Flex>
+      </Container>
+    </Box>
+  )
 }

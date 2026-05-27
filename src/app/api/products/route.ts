@@ -118,9 +118,9 @@ export async function GET(request: Request) {
     if (id) {
       const product = await prisma.product.findFirst({
         where: {
-          id: id,
-          sellerId: dbUser.id, 
-        },
+          id,
+          sellerId: dbUser.id,
+      },
         include: {
           category: true,
           images: {
@@ -138,7 +138,7 @@ export async function GET(request: Request) {
         )
       }
 
-      return Response.json(product) // Devuelve un OBJETO único, no un array
+      return Response.json(product) 
     }
     const products = await prisma.product.findMany({
       where: {
@@ -202,14 +202,17 @@ export async function DELETE(request: Request) {
         { status: 404 }
       )
     }
-    const deleteResult = await prisma.product.deleteMany({
+    const updatedProduct = await prisma.product.updateMany({
       where: {
-        id: id,
+        id,
         sellerId: dbUser.id,
+      },
+      data: {
+        isActive: false,
       },
     })
 
-    if (deleteResult.count === 0) {
+    if (updatedProduct.count === 0) {
       return Response.json(
         { error: "Product not found or unauthorized" },
         { status: 404 }
@@ -260,7 +263,6 @@ export async function PUT(request: Request) {
       )
     }
 
-    // 1. Verificamos que el producto exista y le pertenezca a este usuario
     const existingProduct = await prisma.product.findFirst({
       where: {
         id: id,
@@ -275,30 +277,46 @@ export async function PUT(request: Request) {
       )
     }
 
-    // 2. Actualizamos el producto y reemplazamos la imagen
-    await prisma.product.update({
-      where: {
-        id: id,
-      },
-
-      data: {
-        title: body.title,
-        description: body.description,
-        price: body.price,
-        stock: body.stock,
-        weight: body.weight,
-        categoryId: body.categoryId,
-
-        images: {
-          deleteMany: {},
-
-          create: {
-            url: body.images[0],
-            isPrimary: true,
-          },
+    if (body.isActive !== undefined) {
+      await prisma.product.update({
+        where: {
+          id,
         },
-      },
-    })
+        data: {
+          isActive: body.isActive,
+        },
+      })
+
+      return Response.json({
+        message: "Estado actualizado",
+      })
+    }
+
+    await prisma.product.update({
+        where: {
+          id: id,
+        },
+
+        data: {
+          title: body.title,
+          description: body.description,
+          price: body.price,
+          stock: body.stock,
+          weight: body.weight,
+          categoryId: body.categoryId,
+
+          ...(body.images?.length > 0 && {
+            images: {
+              deleteMany: {},
+
+              create: body.images.map((img: string, index: number) => ({
+                url: img,
+                isPrimary: index === 0,
+              })),
+            },
+          }),
+        },
+      })
 
     return Response.json({ message: "Product updated successfully" })
 

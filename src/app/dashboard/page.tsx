@@ -24,6 +24,7 @@ interface Publication {
   category: {
     name: string
   }
+  isActive: boolean
 
   images?: { url: string }[]
 }
@@ -137,6 +138,7 @@ export default function ProductsPage() {
                 price={book.price}
                 images={book.images?.map(img => img.url) || []}
                 category={book.category.name}
+                isActive={book.isActive}
               />
             ))}
           </Grid>

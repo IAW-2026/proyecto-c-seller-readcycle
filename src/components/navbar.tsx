@@ -7,11 +7,19 @@ import {
   Flex,
   HStack,
   Link,
-  Spacer
+  Spacer,
 } from "@chakra-ui/react"
 
 import Image from "next/image"
 import NextLink from "next/link"
+
+import {
+  Show,
+  SignInButton,
+  SignUpButton,
+} from "@clerk/nextjs"
+
+import UserButton from "../components/clerk-user-button"
 
 export function Navbar() {
   return (
@@ -25,13 +33,10 @@ export function Navbar() {
       zIndex="sticky"
     >
       <Container
-        maxW="full" 
-        px={{ base: "4", md: "10" }} 
+        maxW="full"
+        px={{ base: "4", md: "10" }}
       >
-        <Flex
-          h="20"
-          align="center"
-        >
+        <Flex h="20" align="center">
           <Link
             asChild
             textDecoration="none"
@@ -49,56 +54,59 @@ export function Navbar() {
             </NextLink>
           </Link>
 
-          <HStack gap="4" ml="10" display={{ base: "none", md: "flex" }}>
-            <Link asChild href="/dashboard">
-              <NextLink href="/dashboard">
-                <Button
-                  variant="ghost"
-                  color="brand.forest"
-                  borderRadius="brand"
-                  fontFamily="heading"
-                  fontWeight="600"
-                  px="4"
-                  _hover={{ bg: "brand.sand" }}
-                >
-                  Mis publicaciones
+          <HStack gap="4" ml="10" display={{ base: "none", md: "flex" }}> 
+            <Link asChild href="/dashboard"> 
+              <NextLink href="/dashboard"> 
+                <Button variant="ghost" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} > 
+                  Mis publicaciones 
                 </Button>
-              </NextLink>
+              </NextLink> 
             </Link>
 
-            <Link asChild href="/dashboard/new">
-              <NextLink href="/dashboard/new">
-                <Button
-                  variant="ghost"
-                  color="brand.forest"
-                  borderRadius="brand"
-                  fontFamily="heading"
-                  fontWeight="600"
-                  px="4"
-                  _hover={{ bg: "brand.sand" }}
-                >
-                  Crear nueva publicación
-                </Button>
-              </NextLink>
+           <Link asChild href="/dashboard/new"> 
+            <NextLink href="/dashboard/new"> 
+                <Button variant="ghost" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} > 
+                  Crear nueva publicación 
+                </Button> 
+              </NextLink> 
             </Link>
 
-            <Link asChild href="/dashboard/orders">
-              <NextLink href="/dashboard/orders">
-                <Button
-                  variant="ghost"
-                  color="brand.forest"
-                  borderRadius="brand"
-                  fontFamily="heading"
-                  fontWeight="600"
-                  px="4"
-                  _hover={{ bg: "brand.sand" }}
-                >
-                  Historial de ventas
-                </Button>
-            </NextLink>
-            </Link>
+            <Link asChild href="/dashboard/orders"> 
+              <NextLink href="/dashboard/orders"> 
+                <Button variant="ghost" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} > 
+                  Historial de ventas 
+                </Button> 
+              </NextLink> 
+              </Link>
           </HStack>
           <Spacer />
+
+          <HStack gap="3">
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <Button
+                  variant="ghost"
+                  color="brand.forest"
+                >
+                  Iniciar sesión
+                </Button>
+              </SignInButton>
+
+              <SignUpButton mode="modal">
+                <Button
+                  bg="brand.forest"
+                  color="white"
+                  _hover={{ opacity: 0.9 }}
+                >
+                  Registrarse
+                </Button>
+              </SignUpButton>
+            </Show>
+
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+          </HStack>
         </Flex>
       </Container>
     </Box>
