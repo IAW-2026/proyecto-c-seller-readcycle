@@ -74,7 +74,8 @@ export default function CreateBookPage() {
       })
       const result = await response.json()
       if (!response.ok) {
-        throw new Error(result.error || "Error al crear el libro")
+        alert(result.error || "Error al crear el libro")
+        return
       }
       router.push("/dashboard")
     } catch (error: any) {
