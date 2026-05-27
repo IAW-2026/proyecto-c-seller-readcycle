@@ -17,11 +17,14 @@ import {
   Show,
   SignInButton,
   SignUpButton,
+  useUser
 } from "@clerk/nextjs"
 
 import UserButton from "../components/clerk-user-button"
 
 export function Navbar() {
+  const { user } = useUser()
+  const isAdmin = (user?.publicMetadata?.roles as string[])?.includes("admin")
   return (
     <Box
       as="header"
@@ -78,6 +81,23 @@ export function Navbar() {
                 </Button> 
               </NextLink> 
               </Link>
+              {isAdmin && (
+                <Link asChild href="/dashboard/admin">
+                  <NextLink href="/dashboard/admin">
+                    <Button
+                      variant="ghost"
+                      color="red.600"
+                      borderRadius="brand"
+                      fontFamily="heading"
+                      fontWeight="600"
+                      px="4"
+                      _hover={{ bg: "red.100" }}
+                    >
+                      Admin Panel
+                    </Button>
+                  </NextLink>
+                </Link>
+              )}
           </HStack>
           <Spacer />
 
