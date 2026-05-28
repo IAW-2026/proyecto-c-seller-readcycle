@@ -5,6 +5,7 @@ export async function POST(req: Request) {
 
   try {
     const { userId } = await auth()
+
     if (!userId) {
       return Response.json(
         { error: "Unauthorized" },
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
 
     if (
       !body.title ||
+      !body.author ||
       !body.description ||
       !body.price ||
       !body.stock ||
@@ -58,6 +60,7 @@ export async function POST(req: Request) {
     const product = await prisma.product.create({
       data: {
         title: body.title,
+        author: body.author,
         description: body.description,
         price: Number(body.price),
         stock: Number(body.stock),
@@ -78,10 +81,12 @@ export async function POST(req: Request) {
         images: true,
       },
     })
+
     return Response.json(product)
 
   } catch (error) {
     console.error(error)
+
     return Response.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -89,7 +94,8 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(request: Request) { 
+export async function GET(request: Request) {
+
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
@@ -115,14 +121,17 @@ export async function GET(request: Request) {
         { status: 404 }
       )
     }
+
     if (id) {
       const product = await prisma.product.findFirst({
         where: {
           id,
           sellerId: dbUser.id,
-      },
+        },
+
         include: {
           category: true,
+
           images: {
             orderBy: {
               isPrimary: "desc",
@@ -138,8 +147,9 @@ export async function GET(request: Request) {
         )
       }
 
-      return Response.json(product) 
+      return Response.json(product)
     }
+
     const products = await prisma.product.findMany({
       where: {
         sellerId: dbUser.id,
@@ -159,9 +169,12 @@ export async function GET(request: Request) {
         createdAt: "desc",
       },
     })
+
     return Response.json(products)
+
   } catch (error) {
     console.error(error)
+
     return Response.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -170,6 +183,7 @@ export async function GET(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
@@ -202,11 +216,13 @@ export async function DELETE(request: Request) {
         { status: 404 }
       )
     }
+
     const updatedProduct = await prisma.product.updateMany({
       where: {
         id,
         sellerId: dbUser.id,
       },
+
       data: {
         isActive: false,
       },
@@ -218,10 +234,14 @@ export async function DELETE(request: Request) {
         { status: 404 }
       )
     }
-    return Response.json({ message: "Producto eliminado exitosamente" })
+
+    return Response.json({
+      message: "Producto eliminado exitosamente"
+    })
 
   } catch (error) {
     console.error(error)
+
     return Response.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -230,12 +250,15 @@ export async function DELETE(request: Request) {
 }
 
 export async function PUT(request: Request) {
+
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
+
     const body = await request.json()
 
     const { userId } = await auth()
+
     if (!userId) {
       return Response.json(
         { error: "Unauthorized" },
@@ -278,10 +301,12 @@ export async function PUT(request: Request) {
     }
 
     if (body.isActive !== undefined) {
+
       await prisma.product.update({
         where: {
           id,
         },
+
         data: {
           isActive: body.isActive,
         },
@@ -293,35 +318,39 @@ export async function PUT(request: Request) {
     }
 
     await prisma.product.update({
-        where: {
-          id: id,
-        },
+      where: {
+        id: id,
+      },
 
-        data: {
-          title: body.title,
-          description: body.description,
-          price: body.price,
-          stock: body.stock,
-          weight: body.weight,
-          categoryId: body.categoryId,
+      data: {
+        title: body.title,
+        author: body.author,
+        description: body.description,
+        price: body.price,
+        stock: body.stock,
+        weight: body.weight,
+        categoryId: body.categoryId,
 
-          ...(body.images?.length > 0 && {
-            images: {
-              deleteMany: {},
+        ...(body.images?.length > 0 && {
+          images: {
+            deleteMany: {},
 
-              create: body.images.map((img: string, index: number) => ({
-                url: img,
-                isPrimary: index === 0,
-              })),
-            },
-          }),
-        },
-      })
+            create: body.images.map((img: string, index: number) => ({
+              url: img,
+              isPrimary: index === 0,
+            })),
+          },
+        }),
+      },
+    })
 
-    return Response.json({ message: "Product updated successfully" })
+    return Response.json({
+      message: "Product updated successfully"
+    })
 
   } catch (error) {
     console.error(error)
+
     return Response.json(
       { error: "Internal Server Error" },
       { status: 500 }

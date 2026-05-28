@@ -9,14 +9,17 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 interface BookCardProps {
   id: string
   title: string
+  author: string
   description: string
   price: number
+  stock: number
   images: string[]
   category: string
   isActive: boolean
@@ -25,8 +28,10 @@ interface BookCardProps {
 export default function BookCard({
   id,
   title,
+  author,
   description,
   price,
+  stock,
   images,
   category,
   isActive,
@@ -36,6 +41,7 @@ export default function BookCard({
   const router = useRouter()
 
   async function handleDelete() {
+
     const confirmDelete = confirm(
       "¿Estás seguro de eliminar este libro?"
     )
@@ -43,6 +49,7 @@ export default function BookCard({
     if (!confirmDelete) return
 
     try {
+
       setIsDeleting(true)
 
       await fetch(`/api/products?id=${id}`, {
@@ -50,102 +57,149 @@ export default function BookCard({
       })
 
       window.location.reload()
+
     } catch (error) {
+
       console.error(error)
+
     } finally {
+
       setIsDeleting(false)
     }
   }
 
   async function handleReactivate() {
-  try {
-    setIsDeleting(true)
 
-    await fetch(`/api/products?id=${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        isActive: true,
-      }),
-    })
+    try {
 
-    window.location.reload()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    setIsDeleting(false)
+      setIsDeleting(true)
+
+      await fetch(`/api/products?id=${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isActive: true,
+        }),
+      })
+
+      window.location.reload()
+
+    } catch (error) {
+
+      console.error(error)
+
+    } finally {
+
+      setIsDeleting(false)
+    }
   }
-}
 
   return (
-    <Box opacity={isActive ? 1 : 0.6}>
-      <Card.Root
-        overflow="hidden"
-        borderRadius="2xl"
-        boxShadow="md"
-        transition="0.2s"
-        bg="white"
-        position="relative"
-        _hover={{
-          transform: "translateY(-4px)",
-          boxShadow: "xl",
-        }}
-      >
-        {!isActive && (
-          <Box
-            position="absolute"
-            top="3"
-            right="3"
-            zIndex="10"
+    <Card.Root
+      overflow="hidden"
+      borderRadius="2xl"
+      boxShadow="md"
+      transition="0.2s"
+      bg="white"
+      position="relative"
+      h="620px"
+      display="flex"
+      flexDirection="column"
+      _hover={{
+        transform: "translateY(-4px)",
+        boxShadow: "xl",
+      }}
+      opacity={isActive ? 1 : 0.6}
+    >
+
+      {!isActive && (
+        <Box
+          position="absolute"
+          top="3"
+          right="3"
+          zIndex="10"
+        >
+          <Badge
+            bg="red.500"
+            color="white"
+            px="3"
+            py="1"
+            borderRadius="full"
           >
-            <Badge
-              bg="red.500"
-              color="white"
-              px="3"
-              py="1"
-              borderRadius="full"
-            >
-              Inactivo
-            </Badge>
-          </Box>
-        )}
+            Inactivo
+          </Badge>
+        </Box>
+      )}
 
-        <Image
-          src={images?.[0] || "/placeholder-book.jpg"}
-          alt={title}
-          h="220px"
-          objectFit="cover"
-        />
+      <Image
+        src={images?.[0] || "/placeholder-book.jpg"}
+        alt={title}
+        h="220px"
+        minH="220px"
+        objectFit="cover"
+      />
 
-        <Card.Body gap="4">
-          <VStack align="start" gap="2">
-            <Badge
-              bg="brand.sage"
-              color="white"
-              px="3"
-              py="1"
-              borderRadius="full"
-              fontSize="xs"
-            >
-              {category}
-            </Badge>
+      <Card.Body
+        flex="1"
+        display="flex"
+        flexDirection="column"
+        overflow="hidden"
+        minH="0"
+      >
 
-            <Card.Title
-              fontSize="xl"
-              color="brand.forest"
-            >
-              {title}
-            </Card.Title>
-          </VStack>
+        <VStack
+          align="start"
+          gap="2"
+          mb="4"
+        >
 
-          <Card.Description
+          <Badge
+            bg="brand.sage"
+            color="white"
+            px="3"
+            py="1"
+            borderRadius="full"
+            fontSize="xs"
+          >
+            {category}
+          </Badge>
+
+          <Card.Title
+            fontSize="xl"
+            color="brand.forest"
+            lineClamp={2}
+          >
+            {title}
+          </Card.Title>
+
+          <Text
+            fontSize="sm"
+            color="gray.500"
+            fontWeight="medium"
+            lineClamp={1}
+          >
+            {author}
+          </Text>
+
+        </VStack>
+
+        <Box
+          h="72px"
+          overflow="hidden"
+          mb="4"
+          flexShrink={0}
+        >
+          <Text
             color="gray.600"
             lineClamp={3}
           >
             {description}
-          </Card.Description>
+          </Text>
+        </Box>
+
+        <Box mt="auto">
 
           <Text
             fontSize="2xl"
@@ -154,56 +208,71 @@ export default function BookCard({
           >
             ${price}
           </Text>
-        </Card.Body>
 
-        <Card.Footer gap="3">
+          <Text
+            fontSize="sm"
+            color={stock > 0 ? "brand.sage" : "brand.clay"}
+            fontWeight="semibold"
+          >
+            {stock > 0
+              ? `Stock disponible: ${stock}`
+              : "Sin stock"}
+          </Text>
+
+        </Box>
+
+      </Card.Body>
+
+      <Card.Footer gap="3">
+
+        <Button
+          flex="1"
+          bg="brand.forest"
+          color="brand.beige"
+          borderRadius="xl"
+          fontWeight="600"
+          onClick={() =>
+            router.push(`/dashboard/${id}/edit`)
+          }
+          _hover={{
+            bg: "brand.sage",
+          }}
+          disabled={!isActive}
+        >
+          Editar
+        </Button>
+
+        {isActive ? (
           <Button
             flex="1"
-            bg="brand.forest"
+            bg="brand.clay"
             color="brand.beige"
             borderRadius="xl"
             fontWeight="600"
-            onClick={() =>
-              router.push(`/dashboard/${id}/edit`)
-            }
-            _hover={{
-              bg: "brand.sage",
-            }}
-            disabled={!isActive}
+            onClick={handleDelete}
+            loading={isDeleting}
           >
-            Editar
+            Eliminar
           </Button>
+        ) : (
+          <Button
+            flex="1"
+            bg="green.600"
+            color="white"
+            borderRadius="xl"
+            fontWeight="600"
+            onClick={handleReactivate}
+            loading={isDeleting}
+            _hover={{
+              bg: "green.700",
+            }}
+          >
+            Reactivar
+          </Button>
+        )}
 
-          {isActive ? (
-            <Button
-              flex="1"
-              bg="brand.clay"
-              color="brand.beige"
-              borderRadius="xl"
-              fontWeight="600"
-              onClick={handleDelete}
-              loading={isDeleting}
-            >
-              Eliminar
-            </Button>
-          ) : (
-            <Button
-              flex="1"
-              bg="green.600"
-              color="white"
-              borderRadius="xl"
-              fontWeight="600"
-              onClick={handleReactivate}
-              loading={isDeleting}
-              _hover={{
-                bg: "green.700",
-              }}
-            >
-              Reactivar
-            </Button>
-          )}
-        </Card.Footer>
-      </Card.Root>
-    </Box>
+      </Card.Footer>
+
+    </Card.Root>
   )
 }
