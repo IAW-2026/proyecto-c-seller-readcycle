@@ -239,22 +239,35 @@ export function BookForm({
                   borderColor="brand.sage"
                   borderRadius="brand"
                   bg="brand.beige"
+                  overflow="hidden"
                 >
-                  <VStack gap={2}>
-                    <Icon
-                      as={LuCamera}
-                      boxSize="40px"
-                      color="brand.sage"
+                  {previewImages.length > 0 ? (
+                    <Image
+                      src={previewImages[0]}
+                      alt="Preview"
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
                     />
+                  ) : (
+                    <VStack gap={2}>
+                      <Icon
+                        as={LuCamera}
+                        boxSize="40px"
+                        color="brand.sage"
+                      />
 
-                    <Text
-                      fontSize="sm"
-                      fontWeight="bold"
-                      color="brand.sage"
-                    >
-                      Agregar fotos
-                    </Text>
-                  </VStack>
+                      <Text
+                        fontSize="sm"
+                        fontWeight="bold"
+                        color="brand.sage"
+                      >
+                        {initialData
+                          ? "Cambiar foto"
+                          : "Agregar foto *"}
+                      </Text>
+                    </VStack>
+                  )}
                 </Center>
 
                 <Input
@@ -270,23 +283,6 @@ export function BookForm({
                   onChange={handleImages}
                 />
               </Box>
-
-              {previewImages.length > 0 && (
-                <HStack wrap="wrap" gap={3}>
-                  {previewImages.map((image, index) => (
-                    <Image
-                      key={index}
-                      src={image}
-                      alt={`Preview ${index}`}
-                      boxSize="60px"
-                      objectFit="cover"
-                      rounded="md"
-                      border="1px solid"
-                      borderColor="gray.200"
-                    />
-                  ))}
-                </HStack>
-              )}
             </VStack>
 
             <VStack

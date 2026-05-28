@@ -33,10 +33,13 @@ export default function AdminDeleteProductButton({
 
   return (
     <Button
-      colorPalette="red"
-      size="sm"
+      flex="1"
+      bg="brand.clay"
+      color="brand.beige"
+      borderRadius="xl"
+      fontWeight="600"
       onClick={handleDelete}
-    >
+      >
       Eliminar
     </Button>
   )

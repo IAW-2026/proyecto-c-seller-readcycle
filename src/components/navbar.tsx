@@ -85,15 +85,24 @@ export function Navbar() {
                 <Link asChild href="/dashboard/admin">
                   <NextLink href="/dashboard/admin">
                     <Button
-                      variant="ghost"
-                      color="red.600"
+                      bg="brand.clay"
+                      color="white"
                       borderRadius="brand"
                       fontFamily="heading"
                       fontWeight="600"
-                      px="4"
-                      _hover={{ bg: "red.100" }}
+                      px="5"
+                      py="2"
+                      shadow="sm"
+                      transition="0.2s"
+                      _hover={{
+                        bg: "red.700",
+                        transform: "translateY(-1px)",
+                      }}
+                      _active={{
+                        transform: "scale(0.98)",
+                      }}
                     >
-                      Admin Panel
+                      Panel Administrador
                     </Button>
                   </NextLink>
                 </Link>

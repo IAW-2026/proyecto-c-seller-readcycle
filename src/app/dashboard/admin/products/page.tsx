@@ -67,19 +67,19 @@ export default async function AdminProductsPage() {
             <Table.Header bg="brand.beige">
               <Table.Row>
 
-                <Table.ColumnHeader py="4"  color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }}>
+                <Table.ColumnHeader py="4" >
                   Producto
                 </Table.ColumnHeader>
 
-                <Table.ColumnHeader py="4"  color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} >
+                <Table.ColumnHeader py="4" >
                   Vendedor
                 </Table.ColumnHeader>
 
-                <Table.ColumnHeader py="4"  color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} >
+                <Table.ColumnHeader py="4" >
                   Precio
                 </Table.ColumnHeader>
 
-                <Table.ColumnHeader py="4" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} >
+                <Table.ColumnHeader py="4" >
                   Acciones
                 </Table.ColumnHeader>
 

@@ -136,7 +136,7 @@ export default function BookCard({
       <Image
         src={images?.[0] || "/placeholder-book.jpg"}
         alt={title}
-        h="220px"
+        h="270px"
         minH="220px"
         objectFit="cover"
       />

@@ -7,11 +7,14 @@ import {
   Table,
   Text,
   VStack,
-  Flex,
   Stack,
 } from "@chakra-ui/react"
 
-import { clerkClient } from "@clerk/nextjs/server"
+import {
+  clerkClient,
+  auth,
+} from "@clerk/nextjs/server"
+
 import { redirect } from "next/navigation"
 
 import { isAdmin } from "../../../../lib/isAdmin"
@@ -25,6 +28,8 @@ export default async function AdminUsersPage() {
   if (!admin) {
     redirect("/")
   }
+
+  const { userId } = await auth()
 
   const client = await clerkClient()
 
@@ -41,11 +46,12 @@ export default async function AdminUsersPage() {
             fontWeight="800"
             lineHeight="1"
           >
-          Administración de Usuarios
+            Administración de Usuarios
           </Heading>
         </Stack>
-        
+
         <CreateUserForm />
+
         <Box
           bg="white"
           borderWidth="1px"
@@ -79,52 +85,52 @@ export default async function AdminUsersPage() {
             </Table.Header>
 
             <Table.Body>
-              {users.data.map((user) => {
-                const roles =
-                  (user.publicMetadata.roles as string[]) || []
+              {users.data.filter((user) => user.id !== userId).map((user) => {
+                  const roles =
+                    (user.publicMetadata.roles as string[]) || []
 
-                return (
-                  <Table.Row key={user.id}>
+                  return (
+                    <Table.Row key={user.id}>
 
-                    <Table.Cell>
-                      <Text fontWeight="600">
-                        {user.firstName} {user.lastName}
-                      </Text>
-                    </Table.Cell>
+                      <Table.Cell>
+                        <Text fontWeight="600">
+                          {user.firstName} {user.lastName}
+                        </Text>
+                      </Table.Cell>
 
-                    <Table.Cell>
-                      {user.emailAddresses[0]?.emailAddress}
-                    </Table.Cell>
+                      <Table.Cell>
+                        {user.emailAddresses[0]?.emailAddress}
+                      </Table.Cell>
 
-                    <Table.Cell>
-                      <HStack>
+                      <Table.Cell>
+                        <HStack>
 
-                        {roles.map((role) => (
-                          <Badge
-                            key={role}
-                            bg="brand.sand"
-                            color="brand.forest"
-                            borderRadius="full"
-                            px="3"
-                            py="1"
-                            textTransform="capitalize"
-                          >
-                            {role}
-                          </Badge>
-                        ))}
+                          {roles.map((role) => (
+                            <Badge
+                              key={role}
+                              bg="brand.sand"
+                              color="brand.forest"
+                              borderRadius="full"
+                              px="3"
+                              py="1"
+                              textTransform="capitalize"
+                            >
+                              {role}
+                            </Badge>
+                          ))}
 
-                      </HStack>
-                    </Table.Cell>
+                        </HStack>
+                      </Table.Cell>
 
-                    <Table.Cell>
-                      <AdminDeleteUserButton
-                        userId={user.id}
-                      />
-                    </Table.Cell>
+                      <Table.Cell>
+                        <AdminDeleteUserButton
+                          userId={user.id}
+                        />
+                      </Table.Cell>
 
-                  </Table.Row>
-                )
-              })}
+                    </Table.Row>
+                  )
+                })}
             </Table.Body>
 
           </Table.Root>
