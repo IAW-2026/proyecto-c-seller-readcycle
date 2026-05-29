@@ -16,10 +16,9 @@ import {
 } from "@clerk/nextjs/server"
 
 import { redirect } from "next/navigation"
-
 import { isAdmin } from "../../../../lib/isAdmin"
-
 import AdminDeleteUserButton from "../../../../components/admin-delete-user-button"
+import AdminEditUserButton from "../../../../components/admin-edit-user-button"
 import CreateUserForm from "../../../../components/create-user-form"
 
 export default async function AdminUsersPage() {
@@ -38,107 +37,160 @@ export default async function AdminUsersPage() {
   })
 
   return (
-    <Container maxW="1400px" py="10">
-      <VStack align="stretch" gap="8">
+     <Box bg="brand.beige" minH="100vh" py={2}>  
+      <Container maxW="1400px" py="10">
+        <VStack align="stretch" gap="8">
 
-        <Stack gap="5">
-          <Heading
-            fontSize="5xl"
-            color="brand.forest"
-            fontWeight="800"
-            lineHeight="1"
+          <Stack gap="2">
+
+            <Heading
+              fontSize="5xl"
+              color="brand.forest"
+              fontWeight="900"
+              lineHeight="1"
+            >
+              Administración de Usuarios
+            </Heading>
+
+          </Stack>
+
+          <CreateUserForm />
+
+          <Box
+            bg="white"
+            borderWidth="1px"
+            borderColor="gray.200"
+            borderRadius="2xl"
+            overflow="hidden"
+            shadow="md"
           >
-            Administración de Usuarios
-          </Heading>
-        </Stack>
 
-        <CreateUserForm />
+            <Table.Root>
 
-        <Box
-          bg="white"
-          borderWidth="1px"
-          borderColor="brand.sand"
-          borderRadius="brand"
-          overflow="hidden"
-          shadow="sm"
-        >
-          <Table.Root>
+              <Table.Header bg="gray.50">
 
-            <Table.Header bg="brand.beige">
-              <Table.Row>
+                <Table.Row>
 
-                <Table.ColumnHeader py="4">
-                  Usuario
-                </Table.ColumnHeader>
+                  <Table.ColumnHeader py="4">
+                    Usuario
+                  </Table.ColumnHeader>
 
-                <Table.ColumnHeader py="4">
-                  Email
-                </Table.ColumnHeader>
+                  <Table.ColumnHeader py="4">
+                    Email
+                  </Table.ColumnHeader>
 
-                <Table.ColumnHeader py="4">
-                  Roles
-                </Table.ColumnHeader>
+                  <Table.ColumnHeader py="4">
+                    Roles
+                  </Table.ColumnHeader>
 
-                <Table.ColumnHeader py="4">
-                  Acciones
-                </Table.ColumnHeader>
+                  <Table.ColumnHeader
+                    py="4"
+                    w="220px"
+                  >
+                    Acciones
+                  </Table.ColumnHeader>
 
-              </Table.Row>
-            </Table.Header>
+                </Table.Row>
 
-            <Table.Body>
-              {users.data.filter((user) => user.id !== userId).map((user) => {
-                  const roles =
-                    (user.publicMetadata.roles as string[]) || []
+              </Table.Header>
 
-                  return (
-                    <Table.Row key={user.id}>
+              <Table.Body>
 
-                      <Table.Cell>
-                        <Text fontWeight="600">
-                          {user.firstName} {user.lastName}
-                        </Text>
-                      </Table.Cell>
+                {users.data
+                  .filter((user) => user.id !== userId)
+                  .map((user) => {
+                    const roles =
+                      (user.publicMetadata.roles as string[]) || []
 
-                      <Table.Cell>
-                        {user.emailAddresses[0]?.emailAddress}
-                      </Table.Cell>
+                    return (
+                      <Table.Row
+                        key={user.id}
+                        _hover={{
+                          bg: "gray.50",
+                        }}
+                      >
 
-                      <Table.Cell>
-                        <HStack>
+                        <Table.Cell py="5">
 
-                          {roles.map((role) => (
-                            <Badge
-                              key={role}
-                              bg="brand.sand"
+                          <VStack
+                            align="start"
+                            gap="0"
+                          >
+
+                            <Text
+                              fontWeight="700"
                               color="brand.forest"
-                              borderRadius="full"
-                              px="3"
-                              py="1"
-                              textTransform="capitalize"
                             >
-                              {role}
-                            </Badge>
-                          ))}
+                              {user.firstName} {user.lastName}
+                            </Text>
 
-                        </HStack>
-                      </Table.Cell>
+                          </VStack>
 
-                      <Table.Cell>
-                        <AdminDeleteUserButton
-                          userId={user.id}
-                        />
-                      </Table.Cell>
+                        </Table.Cell>
 
-                    </Table.Row>
-                  )
-                })}
-            </Table.Body>
+                        <Table.Cell py="5">
 
-          </Table.Root>
-        </Box>
+                          <Text color="gray.700">
+                            {user.emailAddresses[0]?.emailAddress}
+                          </Text>
 
-      </VStack>
-    </Container>
+                        </Table.Cell>
+
+                        <Table.Cell py="5">
+
+                          <HStack gap="2">
+
+                            {roles.map((role) => (
+                              <Badge
+                                key={role}
+                                bg="brand.sand"
+                                color="brand.forest"
+                                borderRadius="full"
+                                px="3"
+                                py="1"
+                                textTransform="capitalize"
+                              >
+                                {role}
+                              </Badge>
+                            ))}
+
+                          </HStack>
+
+                        </Table.Cell>
+
+                        <Table.Cell py="5">
+
+                          <HStack gap="3">
+
+                            <AdminEditUserButton
+                              user={{
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                roles,
+                              }}
+                            />
+
+                            <AdminDeleteUserButton
+                              userId={user.id}
+                            />
+
+                          </HStack>
+
+                        </Table.Cell>
+
+                      </Table.Row>
+                    )
+                  })}
+
+              </Table.Body>
+
+            </Table.Root>
+
+          </Box>
+
+        </VStack>
+      </Container>
+    </Box>
   )
 }

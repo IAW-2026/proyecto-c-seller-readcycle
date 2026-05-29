@@ -37,3 +37,55 @@ export async function DELETE(
     success: true,
   })
 }
+
+export async function PUT(
+  req: Request,
+  context: {
+    params: Promise<{
+      id: string
+    }>
+  }
+) {
+  const admin = await isAdmin()
+
+  if (!admin) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    )
+  }
+
+  const params = await context.params
+
+  const body = await req.json()
+
+  const {
+    firstName,
+    lastName,
+    roles,
+  } = body
+
+  const client = await clerkClient()
+
+  await client.users.updateUser(params.id, {
+    firstName,
+    lastName,
+    publicMetadata: {
+      roles,
+    },
+  })
+
+  await prisma.user.updateMany({
+    where: {
+      clerkUserId: params.id,
+    },
+    data: {
+      name: firstName,
+      surname: lastName,
+    },
+  })
+
+  return NextResponse.json({
+    success: true,
+  })
+}

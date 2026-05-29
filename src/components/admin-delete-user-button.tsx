@@ -32,14 +32,18 @@ export default function AdminDeleteUserButton({
   }
 
   return (
-    <Button
-      flex="1"
+    
+  <Button
+      size="sm"
       bg="brand.clay"
-      color="brand.beige"
-      borderRadius="xl"
-      fontWeight="600"
+      color="white"
+      borderRadius="lg"
+      w="90px"
       onClick={handleDelete}
-      >
+      _hover={{
+        opacity: 0.9,
+      }}
+    >
       Eliminar
     </Button>
   )

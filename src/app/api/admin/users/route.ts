@@ -18,7 +18,6 @@ export async function POST(req: Request) {
 
   const client = await clerkClient()
 
-  // Crear usuario en Clerk
   const clerkUser = await client.users.createUser({
     firstName: body.name,
     lastName: body.surname,
@@ -29,7 +28,6 @@ export async function POST(req: Request) {
     },
   })
 
-  // Crear usuario en tu DB
   await prisma.user.create({
     data: {
       clerkUserId: clerkUser.id,
