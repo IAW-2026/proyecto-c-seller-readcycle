@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import { useUser } from "@clerk/nextjs"
 
 import {
@@ -17,20 +19,54 @@ import {
 
 export function AddressForm() {
   const { user } = useUser()
+
+  const [address, setAddress] = useState({
+    street: "",
+    number: "",
+    city: "",
+    province: "",
+    zipCode: "",
+  })
+
+  useEffect(() => {
+    async function fetchAddress() {
+      try {
+        const response = await fetch("/api/address")
+
+        if (!response.ok) return
+
+        const data = await response.json()
+
+        setAddress({
+          street: data.street || "",
+          number: data.number || "",
+          city: data.city || "",
+          province: data.province || "",
+          zipCode: data.zipCode || "",
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchAddress()
+  }, [])
+
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
   ) {
     e.preventDefault()
+
     const formData = new FormData(e.currentTarget)
+
     const addressData = {
       street: formData.get("street"),
       number: formData.get("number"),
-
       city: formData.get("city"),
       province: formData.get("province"),
-
       zipCode: formData.get("zipCode"),
     }
+
     try {
       await fetch("/api/address", {
         method: "PUT",
@@ -39,11 +75,13 @@ export function AddressForm() {
         },
         body: JSON.stringify(addressData),
       })
+
       alert("Dirección guardada correctamente")
     } catch (error) {
       console.error(error)
     }
   }
+
   return (
     <Box
       bg="brand.beige"
@@ -51,6 +89,7 @@ export function AddressForm() {
       py={12}
     >
       <Container maxW="1200px">
+
         <Stack gap="5" mb="12">
 
           <Heading
@@ -60,6 +99,7 @@ export function AddressForm() {
           >
             Mi Direccion
           </Heading>
+
           <Flex align="center" gap="4">
             <Box
               w="50px"
@@ -67,6 +107,7 @@ export function AddressForm() {
               bg="brand.clay"
               borderRadius="full"
             />
+
             <Text
               color="gray.600"
               fontSize="lg"
@@ -74,7 +115,9 @@ export function AddressForm() {
               Completa tu información de dirección
             </Text>
           </Flex>
+
         </Stack>
+
         <Grid
           templateColumns={{
             base: "1fr",
@@ -83,8 +126,11 @@ export function AddressForm() {
           gap={8}
           alignItems="start"
         >
+
           <Stack gap={8}>
+
             <form onSubmit={handleSubmit}>
+
               <Box
                 bg="white"
                 p={8}
@@ -93,6 +139,7 @@ export function AddressForm() {
                 borderColor="gray.200"
                 shadow="sm"
               >
+
                 <Grid
                   templateColumns={{
                     base: "1fr",
@@ -100,80 +147,99 @@ export function AddressForm() {
                   }}
                   gap={5}
                 >
+
                   <Field.Root required>
                     <Field.Label fontWeight="600">
                       Calle
                     </Field.Label>
+
                     <Input
                       name="street"
                       placeholder="Ej: Mitre"
                       bg="gray.100"
                       border="none"
                       h="50px"
+                      defaultValue={address.street}
                     />
                   </Field.Root>
+
                   <Field.Root required>
                     <Field.Label fontWeight="600">
                       Número
                     </Field.Label>
+
                     <Input
                       name="number"
                       placeholder="123"
                       bg="gray.100"
                       border="none"
                       h="50px"
+                      defaultValue={address.number}
                     />
                   </Field.Root>
+
                   <Field.Root required>
                     <Field.Label fontWeight="600">
                       Ciudad
                     </Field.Label>
+
                     <Input
                       name="city"
                       placeholder="Ej: Bahía Blanca"
                       bg="gray.100"
                       border="none"
                       h="50px"
+                      defaultValue={address.city}
                     />
                   </Field.Root>
+
                   <Field.Root required>
                     <Field.Label fontWeight="600">
                       Provincia
                     </Field.Label>
+
                     <Input
                       name="province"
                       placeholder="Ej: Buenos Aires"
                       bg="gray.100"
                       border="none"
                       h="50px"
+                      defaultValue={address.province}
                     />
                   </Field.Root>
+
                   <Field.Root required>
                     <Field.Label fontWeight="600">
                       Código postal
                     </Field.Label>
+
                     <Input
                       name="zipCode"
                       bg="gray.100"
                       border="none"
                       h="50px"
+                      defaultValue={address.zipCode}
                     />
                   </Field.Root>
+
                   <Field.Root required>
                     <Field.Label fontWeight="600">
                       País
                     </Field.Label>
+
                     <Input
                       name="country"
                       defaultValue="Argentina"
-                      readOnly 
+                      readOnly
                       cursor="not-allowed"
                       bg="gray.100"
                       border="none"
                       h="50px"
                     />
                   </Field.Root>
+
                 </Grid>
+
                 <Button
                   type="submit"
                   mt={8}
@@ -190,16 +256,25 @@ export function AddressForm() {
                 >
                   Guardar dirección
                 </Button>
+
               </Box>
+
             </form>
-            <Text color="gray.500" fontSize="sm" mt={4} textAlign="center">
-              Recuerda que solo puedes tener una direccion por usuario, pero puedes actualizarla cuando quieras
+
+            <Text
+              color="gray.500"
+              fontSize="sm"
+              mt={4}
+              textAlign="center"
+            >
+              Recuerda que solo puedes tener una direccion por usuario,
+              pero puedes actualizarla cuando quieras
             </Text>
+
           </Stack>
+
         </Grid>
       </Container>
-      
     </Box>
-    
   )
 }

@@ -33,7 +33,9 @@ export default async function AdminUsersPage() {
 
   const client = await clerkClient()
 
-  const users = await client.users.getUserList()
+  const users = await client.users.getUserList({
+    limit: 100,
+  })
 
   return (
     <Container maxW="1400px" py="10">
