@@ -13,7 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 
-import { OrdersList } from "../../../components/orders-list"
+import { OrdersList } from "../../../components/orders/ordersList"
 
 type Order = {
   id: string
@@ -95,7 +95,7 @@ export default function OrdersPage() {
         items: [
           {
             productId:
-              "cmpof0dk50000fowgk2hvdtro",
+              "cmppv6yjb0000wswg5hpvpumw",
 
             quantity: 1,
           },
@@ -170,7 +170,6 @@ export default function OrdersPage() {
           >
             Historial de ventas
           </Heading>
-
           <Flex
             align="center"
             justify="space-between"
@@ -187,7 +186,6 @@ export default function OrdersPage() {
                 bg="brand.clay"
                 borderRadius="full"
               />
-
               <Text
                 color="gray.600"
                 fontSize="lg"
@@ -196,7 +194,6 @@ export default function OrdersPage() {
                 realizadas
               </Text>
             </Flex>
-
             <Button
               bg="brand.forest"
               color="white"
@@ -206,7 +203,6 @@ export default function OrdersPage() {
             </Button>
           </Flex>
         </Stack>
-
         <OrdersList orders={orders} />
       </Container>
     </Box>

@@ -23,7 +23,7 @@ import {
   LuSend
 } from "react-icons/lu"
 
-import { supabase } from "../lib/supabase"
+import { supabase } from "../../lib/supabase"
 
 export interface Category {
   id: string
@@ -32,6 +32,7 @@ export interface Category {
 
 export interface BookFormData {
   title: string
+  author: string
   description: string
   price: string
   stock: string
@@ -44,6 +45,7 @@ interface BookFormProps {
 
   onSubmit: (data: {
     title: string
+    author: string
     description: string
     price: number
     stock: number
@@ -54,6 +56,7 @@ interface BookFormProps {
 
   initialData?: {
     title: string
+    author: string
     description: string
     price: number
     stock: number
@@ -66,6 +69,7 @@ interface BookFormProps {
 
 const emptyForm: BookFormData = {
   title: "",
+  author: "",
   description: "",
   price: "",
   stock: "",
@@ -87,6 +91,7 @@ export function BookForm({
     if (initialData) {
       setFormData({
         title: initialData.title || "",
+        author: initialData.author || "",
         description: initialData.description || "",
         price: initialData.price?.toString() ?? "",
         stock: initialData.stock?.toString() ?? "1",
@@ -104,6 +109,7 @@ export function BookForm({
     >
   ) => {
     const { name, value } = e.target
+
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -130,12 +136,9 @@ export function BookForm({
     const fileExt = file.name.split(".").pop()
     const fileName = `${Date.now()}.${fileExt}`
 
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("products")
       .upload(`books/${fileName}`, file)
-
-    console.log(data)
-    console.log(error)
 
     if (error) {
       throw error
@@ -155,6 +158,7 @@ export function BookForm({
 
     if (
       !formData.title ||
+      !formData.author ||
       !formData.description ||
       !formData.price ||
       !formData.categoryId ||
@@ -226,7 +230,6 @@ export function BookForm({
             columns={{ base: 1, md: 3 }}
             gap={8}
           >
-            {/* Sección de carga de fotos */}
             <VStack gap={4} align="stretch" h="100%">
               <Box position="relative" w="100%" h="220px">
                 <Center
@@ -236,23 +239,37 @@ export function BookForm({
                   borderColor="brand.sage"
                   borderRadius="brand"
                   bg="brand.beige"
+                  overflow="hidden"
                 >
-                  <VStack gap={2}>
-                    <Icon
-                      as={LuCamera}
-                      boxSize="40px"
-                      color="brand.sage"
+                  {previewImages.length > 0 ? (
+                    <Image
+                      src={previewImages[0]}
+                      alt="Preview"
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
                     />
-                    <Text
-                      fontSize="sm"
-                      fontWeight="bold"
-                      color="brand.sage"
-                    >
-                      Agregar fotos
-                    </Text>
-                  </VStack>
+                  ) : (
+                    <VStack gap={2}>
+                      <Icon
+                        as={LuCamera}
+                        boxSize="40px"
+                        color="brand.sage"
+                      />
+
+                      <Text
+                        fontSize="sm"
+                        fontWeight="bold"
+                        color="brand.sage"
+                      >
+                        {initialData
+                          ? "Cambiar foto"
+                          : "Agregar foto *"}
+                      </Text>
+                    </VStack>
+                  )}
                 </Center>
-                {/* Input invisible que cubre el Center por completo */}
+
                 <Input
                   type="file"
                   accept="image/*"
@@ -266,27 +283,8 @@ export function BookForm({
                   onChange={handleImages}
                 />
               </Box>
-
-              {/* Grid de previsualización de imágenes */}
-              {previewImages.length > 0 && (
-                <HStack wrap="wrap" gap={3}>
-                  {previewImages.map((image, index) => (
-                    <Image
-                      key={index}
-                      src={image}
-                      alt={`Preview ${index}`}
-                      boxSize="60px"
-                      objectFit="cover"
-                      rounded="md"
-                      border="1px solid"
-                      borderColor="gray.200"
-                    />
-                  ))}
-                </HStack>
-              )}
             </VStack>
 
-            {/* Resto del formulario (Columna derecha) */}
             <VStack
               gap={4}
               gridColumn={{ md: "span 2" }}
@@ -299,6 +297,7 @@ export function BookForm({
                 >
                   Título del libro *
                 </Field.Label>
+
                 <Input
                   name="title"
                   value={formData.title}
@@ -308,6 +307,25 @@ export function BookForm({
                   {...focusStyles}
                 />
               </Field.Root>
+
+              <Field.Root>
+                <Field.Label
+                  fontSize="xs"
+                  fontWeight="bold"
+                >
+                  Autor *
+                </Field.Label>
+
+                <Input
+                  name="author"
+                  value={formData.author}
+                  onChange={handleChange}
+                  placeholder="Ej: Robert C. Martin"
+                  variant="subtle"
+                  {...focusStyles}
+                />
+              </Field.Root>
+
               <SimpleGrid columns={2} gap={4}>
                 <Field.Root>
                   <Field.Label
@@ -316,6 +334,7 @@ export function BookForm({
                   >
                     Precio *
                   </Field.Label>
+
                   <Input
                     type="number"
                     name="price"
@@ -327,6 +346,7 @@ export function BookForm({
                     {...numberInputStyles}
                   />
                 </Field.Root>
+
                 <Field.Root>
                   <Field.Label
                     fontSize="xs"
@@ -334,6 +354,7 @@ export function BookForm({
                   >
                     Stock *
                   </Field.Label>
+
                   <Input
                     type="number"
                     name="stock"
@@ -345,6 +366,7 @@ export function BookForm({
                     {...numberInputStyles}
                   />
                 </Field.Root>
+
                 <Field.Root>
                   <Field.Label
                     fontSize="xs"
@@ -352,6 +374,7 @@ export function BookForm({
                   >
                     Peso (kg) *
                   </Field.Label>
+
                   <Input
                     type="number"
                     name="weight"
@@ -363,6 +386,7 @@ export function BookForm({
                     {...numberInputStyles}
                   />
                 </Field.Root>
+
                 <Field.Root>
                   <Field.Label
                     fontSize="xs"
@@ -370,6 +394,7 @@ export function BookForm({
                   >
                     Categoría *
                   </Field.Label>
+
                   <NativeSelect.Root>
                     <NativeSelect.Field
                       name="categoryId"
@@ -380,6 +405,7 @@ export function BookForm({
                       <option value="">
                         Selecciona una categoría
                       </option>
+
                       {categories.map((category) => (
                         <option
                           key={category.id}
@@ -389,6 +415,7 @@ export function BookForm({
                         </option>
                       ))}
                     </NativeSelect.Field>
+
                     <NativeSelect.Indicator />
                   </NativeSelect.Root>
                 </Field.Root>
@@ -418,6 +445,7 @@ export function BookForm({
               Descripción
             </Text>
           </VStack>
+
           <Textarea
             name="description"
             value={formData.description}
@@ -440,7 +468,10 @@ export function BookForm({
           loading={loading}
         >
           <Icon as={LuSend} mr={2} />
-          {initialData ? "Guardar cambios" : "Publicar libro"} 
+
+          {initialData
+            ? "Guardar cambios"
+            : "Publicar libro"}
         </Button>
       </VStack>
     </form>

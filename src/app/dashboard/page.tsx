@@ -11,19 +11,24 @@ import {
   Stack,
   Text,
   Spinner,
-  Center
+  Center,
+  Button,
 } from "@chakra-ui/react"
 
-import BookCard from "../../components/book-card"
+import BookCard from "../../components/books/bookCard"
 
 interface Publication {
   id: string
   title: string
+  author: string
   price: number
+  stock: number
   description: string
+
   category: {
     name: string
   }
+
   isActive: boolean
 
   images?: { url: string }[]
@@ -34,23 +39,51 @@ export default function ProductsPage() {
   const [publications, setPublications] = useState<Publication[]>([])
   const [loading, setLoading] = useState(true)
 
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const itemsPerPage = 3
+
   useEffect(() => {
+
     async function fetchProducts() {
+
       try {
+
         const response = await fetch("/api/products")
         const data = await response.json()
+
         if (!response.ok) {
           throw new Error(data.error)
         }
+
         setPublications(data)
+
       } catch (error) {
+
         console.error(error)
+
       } finally {
+
         setLoading(false)
       }
     }
+
     fetchProducts()
+
   }, [])
+
+  const totalPages = Math.ceil(
+    publications.length / itemsPerPage
+  )
+
+  const startIndex =
+    (currentPage - 1) * itemsPerPage
+
+  const currentPublications =
+    publications.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    )
 
   return (
     <Box bg="brand.beige" minH="100vh" py="12">
@@ -60,7 +93,6 @@ export default function ProductsPage() {
           mb="12"
           textAlign={{ base: "center", md: "left" }}
         >
-
           <Heading
             as="h1"
             fontSize={{ base: "3xl", md: "5xl" }}
@@ -70,7 +102,6 @@ export default function ProductsPage() {
           >
             Mis Publicaciones
           </Heading>
-
           <Flex
             align="center"
             gap="4"
@@ -82,7 +113,6 @@ export default function ProductsPage() {
               bg="brand.clay"
               borderRadius="full"
             />
-
             <Text
               color="gray.600"
               fontSize="lg"
@@ -96,7 +126,9 @@ export default function ProductsPage() {
           <Center py="20">
             <Spinner size="xl" />
           </Center>
+
         ) : publications.length === 0 ? (
+
           <Flex
             minH="40vh"
             align="center"
@@ -121,27 +153,76 @@ export default function ProductsPage() {
             </Stack>
           </Flex>
         ) : (
-          <Grid
-            templateColumns={{
-              base: "1fr",
-              md: "repeat(2, 1fr)",
-              lg: "repeat(3, 1fr)",
-            }}
-            gap="8"
-          >
-            {publications.map((book) => (
-              <BookCard
-                key={book.id}
-                id={book.id}
-                title={book.title}
-                description={book.description}
-                price={book.price}
-                images={book.images?.map(img => img.url) || []}
-                category={book.category.name}
-                isActive={book.isActive}
-              />
-            ))}
-          </Grid>
+          <>
+            <Grid
+              templateColumns={{
+                base: "1fr",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(3, 1fr)",
+              }}
+              gap="8"
+              alignItems="start"
+            >
+              {currentPublications.map((book) => (
+                <BookCard
+                  key={book.id}
+                  id={book.id}
+                  title={book.title}
+                  author={book.author}
+                  description={book.description}
+                  price={book.price}
+                  stock={book.stock}
+                  images={book.images?.map(img => img.url) || []}
+                  category={book.category.name}
+                  isActive={book.isActive}
+                />
+              ))}
+            </Grid>
+            <Flex
+              justify="center"
+              align="center"
+              gap="4"
+              mt="10"
+              flexWrap="wrap"
+            >
+              <Button
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    Math.max(prev - 1, 1)
+                  )
+                }
+                disabled={currentPage === 1}
+                bg="brand.forest"
+                color="white"
+                _hover={{
+                  bg: "brand.sage",
+                }}
+              >
+                Anterior
+              </Button>
+              <Text
+                fontWeight="600"
+                color="brand.forest"
+              >
+                Página {currentPage} de {totalPages}
+              </Text>
+              <Button
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    Math.min(prev + 1, totalPages)
+                  )
+                }
+                disabled={currentPage === totalPages}
+                bg="brand.forest"
+                color="white"
+                _hover={{
+                  bg: "brand.sage",
+                }}
+              >
+                Siguiente
+              </Button>
+            </Flex>
+          </>
         )}
       </Container>
     </Box>

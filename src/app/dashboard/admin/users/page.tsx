@@ -7,17 +7,19 @@ import {
   Table,
   Text,
   VStack,
-  Flex,
   Stack,
 } from "@chakra-ui/react"
 
-import { clerkClient } from "@clerk/nextjs/server"
+import {
+  clerkClient,
+  auth,
+} from "@clerk/nextjs/server"
+
 import { redirect } from "next/navigation"
-
 import { isAdmin } from "../../../../lib/isAdmin"
-
-import AdminDeleteUserButton from "../../../../components/admin-delete-user-button"
-import CreateUserForm from "../../../../components/create-user-form"
+import AdminDeleteUserButton from "../../../../components/admin/deleteUserButton"
+import AdminEditUserButton from "../../../../components/admin/editUserButton"
+import CreateUserForm from "../../../../components/admin/createUserForm"
 
 export default async function AdminUsersPage() {
   const admin = await isAdmin()
@@ -26,111 +28,127 @@ export default async function AdminUsersPage() {
     redirect("/")
   }
 
+  const { userId } = await auth()
+
   const client = await clerkClient()
 
-  const users = await client.users.getUserList()
+  const users = await client.users.getUserList({
+    limit: 100,
+  })
 
   return (
-    <Container maxW="1400px" py="10">
-      <VStack align="stretch" gap="8">
-
-        <Stack gap="5">
-          <Heading
-            fontSize="5xl"
-            color="brand.forest"
-            fontWeight="800"
-            lineHeight="1"
+     <Box bg="brand.beige" minH="100vh" py={2}>  
+      <Container maxW="1400px" py="10">
+        <VStack align="stretch" gap="8">
+          <Stack gap="2">
+            <Heading
+              fontSize="5xl"
+              color="brand.forest"
+              fontWeight="900"
+              lineHeight="1"
+            >
+              Administración de Usuarios
+            </Heading>
+          </Stack>
+          <CreateUserForm />
+          <Box
+            bg="white"
+            borderWidth="1px"
+            borderColor="gray.200"
+            borderRadius="2xl"
+            overflow="hidden"
+            shadow="md"
           >
-          Administración de Usuarios
-          </Heading>
-        </Stack>
-        
-        <CreateUserForm />
-        <Box
-          bg="white"
-          borderWidth="1px"
-          borderColor="brand.sand"
-          borderRadius="brand"
-          overflow="hidden"
-          shadow="sm"
-        >
-          <Table.Root>
-
-            <Table.Header bg="brand.beige">
-              <Table.Row>
-
-                <Table.ColumnHeader py="4">
-                  Usuario
-                </Table.ColumnHeader>
-
-                <Table.ColumnHeader py="4">
-                  Email
-                </Table.ColumnHeader>
-
-                <Table.ColumnHeader py="4">
-                  Roles
-                </Table.ColumnHeader>
-
-                <Table.ColumnHeader py="4">
-                  Acciones
-                </Table.ColumnHeader>
-
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {users.data.map((user) => {
-                const roles =
-                  (user.publicMetadata.roles as string[]) || []
-
-                return (
-                  <Table.Row key={user.id}>
-
-                    <Table.Cell>
-                      <Text fontWeight="600">
-                        {user.firstName} {user.lastName}
-                      </Text>
-                    </Table.Cell>
-
-                    <Table.Cell>
-                      {user.emailAddresses[0]?.emailAddress}
-                    </Table.Cell>
-
-                    <Table.Cell>
-                      <HStack>
-
-                        {roles.map((role) => (
-                          <Badge
-                            key={role}
-                            bg="brand.sand"
-                            color="brand.forest"
-                            borderRadius="full"
-                            px="3"
-                            py="1"
-                            textTransform="capitalize"
+            <Table.Root>
+              <Table.Header bg="gray.50">
+                <Table.Row>
+                  <Table.ColumnHeader py="4">
+                    Usuario
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader py="4">
+                    Email
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader py="4">
+                    Roles
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader
+                    py="4"
+                    w="220px"
+                  >
+                    Acciones
+                  </Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {users.data
+                  .filter((user) => user.id !== userId)
+                  .map((user) => { const roles = (user.publicMetadata.roles as string[]) || []
+                    return (
+                      <Table.Row
+                        key={user.id}
+                        _hover={{
+                          bg: "gray.50",
+                        }}
+                      >
+                        <Table.Cell py="5">
+                          <VStack
+                            align="start"
+                            gap="0"
                           >
-                            {role}
-                          </Badge>
-                        ))}
+                            <Text
+                              fontWeight="700"
+                              color="brand.forest"
+                            >
+                              {user.firstName} {user.lastName}
+                            </Text>
+                          </VStack>
+                        </Table.Cell>
+                        <Table.Cell py="5">
+                          <Text color="gray.700">
+                            {user.emailAddresses[0]?.emailAddress}
+                          </Text>
+                        </Table.Cell>
+                        <Table.Cell py="5">
+                          <HStack gap="2">
+                            {roles.map((role) => (
+                              <Badge
+                                key={role}
+                                bg="brand.sand"
+                                color="brand.forest"
+                                borderRadius="full"
+                                px="3"
+                                py="1"
+                                textTransform="capitalize"
+                              >
+                                {role}
+                              </Badge>
+                            ))}
 
-                      </HStack>
-                    </Table.Cell>
-
-                    <Table.Cell>
-                      <AdminDeleteUserButton
-                        userId={user.id}
-                      />
-                    </Table.Cell>
-
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-
-          </Table.Root>
-        </Box>
-
-      </VStack>
-    </Container>
+                          </HStack>
+                        </Table.Cell>
+                        <Table.Cell py="5">
+                          <HStack gap="3">
+                            <AdminEditUserButton
+                              user={{
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                roles,
+                              }}
+                            />
+                            <AdminDeleteUserButton
+                              userId={user.id}
+                            />
+                          </HStack>
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+              </Table.Body>
+            </Table.Root>
+          </Box>
+        </VStack>
+      </Container>
+    </Box>
   )
 }

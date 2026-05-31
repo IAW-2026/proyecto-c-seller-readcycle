@@ -2,6 +2,7 @@ import { clerkClient } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
 import { isAdmin } from "../../../../lib/isAdmin"
+import  prisma  from "../../../../lib/prisma"
 
 export async function POST(req: Request) {
   const admin = await isAdmin()
@@ -17,13 +18,22 @@ export async function POST(req: Request) {
 
   const client = await clerkClient()
 
-  await client.users.createUser({
+  const clerkUser = await client.users.createUser({
     firstName: body.name,
     lastName: body.surname,
     emailAddress: [body.email],
     password: body.password,
     publicMetadata: {
       roles: [body.role],
+    },
+  })
+
+  await prisma.user.create({
+    data: {
+      clerkUserId: clerkUser.id,
+      name: body.name,
+      surname: body.surname,
+      email: body.email,
     },
   })
 
