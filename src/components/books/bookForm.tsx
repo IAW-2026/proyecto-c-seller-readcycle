@@ -23,7 +23,7 @@ import {
   LuSend
 } from "react-icons/lu"
 
-import { supabase } from "../lib/supabase"
+import { supabase } from "../../lib/supabase"
 
 export interface Category {
   id: string

@@ -13,7 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 
-import { OrdersList } from "../../../components/orders-list"
+import { OrdersList } from "../../../components/orders/ordersList"
 
 type Order = {
   id: string

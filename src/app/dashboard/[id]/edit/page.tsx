@@ -14,8 +14,8 @@ import {
   Text,
   Center
 } from "@chakra-ui/react"
-import { BookForm, Category } from "../../../../components/books-form"
-import { SellingTipsPanel } from "../../../../components/selling-tips-panel"
+import { BookForm, Category } from "../../../../components/books/bookForm"
+import { SellingTipsPanel } from "../../../../components/books/sellingTipsPanel"
 
 export default function EditBookPage() {
   const params = useParams()

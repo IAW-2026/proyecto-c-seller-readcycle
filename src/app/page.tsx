@@ -22,7 +22,6 @@ export default function Home() {
       position="relative"
       overflow="hidden"
     >
-      {/* Background blobs */}
       <Box
         position="absolute"
         top="-10%"
@@ -34,7 +33,6 @@ export default function Home() {
         filter="blur(120px)"
         opacity={0.5}
       />
-
       <Box
         position="absolute"
         top="60%"
@@ -46,7 +44,6 @@ export default function Home() {
         filter="blur(120px)"
         opacity={0.2}
       />
-
       <Container maxW="container.xl" minH="100vh">
         <Flex
           direction="column"
@@ -58,7 +55,6 @@ export default function Home() {
           minH="100vh"
           position="relative"
         >
-          {/* Logo */}
           <Box
             mb={12}
             transition="0.7s"
@@ -77,7 +73,6 @@ export default function Home() {
               priority
             />
           </Box>
-
           <Stack gap={8} align="center" maxW="700px">
             <Heading
               fontSize={{ base: "4xl", md: "6xl" }}
@@ -92,7 +87,6 @@ export default function Home() {
                 un nuevo capítulo
               </Text>
             </Heading>
-
             <Text
               maxW="550px"
               fontSize={{ base: "lg", md: "xl" }}
@@ -103,7 +97,6 @@ export default function Home() {
               Dales una segunda vida a los libros que ya leíste y encontrá tu
               próxima aventura a un precio increíble.
             </Text>
-
             <Flex
               direction={{ base: "column", sm: "row" }}
               gap={4}
@@ -138,8 +131,6 @@ export default function Home() {
               </Link>
             </Flex>
           </Stack>
-
-          {/* Footer phrase */}
           <Flex
             mt={24}
             align="center"
@@ -151,9 +142,18 @@ export default function Home() {
             textTransform="uppercase"
             fontSize="xs"
           >
-            <Box w={8} h="1px" bg="brand.forest" opacity={0.2} />
+            <Box w={8} 
+              h="1px" 
+              bg="brand.forest" 
+              opacity={0.2} 
+            />
             Libros usados, historias nuevas
-            <Box w={8} h="1px" bg="brand.forest" opacity={0.2} />
+            <Box 
+              w={8} 
+              h="1px" 
+              bg="brand.forest" 
+              opacity={0.2} 
+            />
           </Flex>
         </Flex>
       </Container>

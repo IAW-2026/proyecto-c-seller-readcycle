@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Badge,
   Card,
@@ -97,7 +95,6 @@ export function OrdersList({
                 >
                   Orden #{order.id}
                 </Heading>
-
                 <Text
                   color="gray.500"
                   fontSize="sm"
@@ -107,7 +104,6 @@ export function OrdersList({
                   ).toLocaleDateString()}
                 </Text>
               </VStack>
-
               <HStack wrap="wrap">
                 <Badge
                   px={3}
@@ -118,7 +114,6 @@ export function OrdersList({
                 >
                   {order.status}
                 </Badge>
-
                 <Badge
                   px={3}
                   py={1}
@@ -131,7 +126,6 @@ export function OrdersList({
               </HStack>
             </Flex>
           </Card.Header>
-
           <Card.Body>
             <VStack
               align="stretch"
@@ -141,7 +135,6 @@ export function OrdersList({
                 label="Buyer ID"
                 value={order.buyerId}
               />
-
               <SimpleGrid
                 columns={{
                   base: 1,
@@ -153,10 +146,7 @@ export function OrdersList({
                   const primaryImage =
                     item.product.images.find(
                       (image) => image.isPrimary
-                    )?.url ??
-                    item.product.images[0]?.url ??
-                    "https://placehold.co/120x160"
-
+                    )?.url ?? item.product.images[0]?.url ??"https://placehold.co/120x160"
                   return (
                     <Card.Root
                       key={item.id}
@@ -176,7 +166,6 @@ export function OrdersList({
                             objectFit="cover"
                             borderRadius="lg"
                           />
-
                           <Stack flex={1}>
                             <Heading
                               size="sm"
@@ -184,29 +173,20 @@ export function OrdersList({
                             >
                               {item.product.title}
                             </Heading>
-
                             <Text
                               fontSize="sm"
                               color="gray.600"
                               lineClamp={3}
                             >
-                              {
-                                item.product
-                                  .description
-                              }
+                              {item.product.description}
                             </Text>
-
                             <Badge
                               w="fit-content"
                               bg="brand.sand"
                               color="brand.forest"
                             >
-                              {
-                                item.product
-                                  .category.name
-                              }
+                              {item.product.category.name}
                             </Badge>
-
                             <HStack
                               justify="space-between"
                               mt={2}
@@ -218,7 +198,6 @@ export function OrdersList({
                                 $
                                 {item.subtotal}
                               </Text>
-
                               <Text
                                 fontSize="sm"
                                 color="gray.500"
@@ -234,7 +213,6 @@ export function OrdersList({
                   )
                 })}
               </SimpleGrid>
-
               <Flex
                 justify="space-between"
                 align="center"
@@ -260,7 +238,6 @@ export function OrdersList({
                     ${order.shippingCost}
                   </Text>
                 </VStack>
-
                 <VStack
                   align="end"
                   gap={0}
@@ -271,7 +248,6 @@ export function OrdersList({
                   >
                     Total
                   </Text>
-
                   <Text
                     fontSize="2xl"
                     fontWeight="bold"
@@ -307,7 +283,6 @@ function BoxInfo({
       >
         {label}
       </Text>
-
       <Text color="gray.700">
         {value}
       </Text>

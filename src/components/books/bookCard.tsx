@@ -47,33 +47,22 @@ export default function BookCard({
     )
 
     if (!confirmDelete) return
-
     try {
-
       setIsDeleting(true)
-
       await fetch(`/api/products?id=${id}`, {
         method: "DELETE",
       })
-
       window.location.reload()
-
     } catch (error) {
-
       console.error(error)
-
     } finally {
-
       setIsDeleting(false)
     }
   }
 
   async function handleReactivate() {
-
     try {
-
       setIsDeleting(true)
-
       await fetch(`/api/products?id=${id}`, {
         method: "PUT",
         headers: {
@@ -83,19 +72,13 @@ export default function BookCard({
           isActive: true,
         }),
       })
-
       window.location.reload()
-
     } catch (error) {
-
       console.error(error)
-
     } finally {
-
       setIsDeleting(false)
     }
   }
-
   return (
     <Card.Root
       overflow="hidden"
@@ -113,7 +96,6 @@ export default function BookCard({
       }}
       opacity={isActive ? 1 : 0.6}
     >
-
       {!isActive && (
         <Box
           position="absolute"
@@ -132,7 +114,6 @@ export default function BookCard({
           </Badge>
         </Box>
       )}
-
       <Image
         src={images?.[0] || "/placeholder-book.jpg"}
         alt={title}
@@ -140,7 +121,6 @@ export default function BookCard({
         minH="220px"
         objectFit="cover"
       />
-
       <Card.Body
         flex="1"
         display="flex"
@@ -148,13 +128,11 @@ export default function BookCard({
         overflow="hidden"
         minH="0"
       >
-
         <VStack
           align="start"
           gap="2"
           mb="4"
         >
-
           <Badge
             bg="brand.sage"
             color="white"
@@ -165,7 +143,6 @@ export default function BookCard({
           >
             {category}
           </Badge>
-
           <Card.Title
             fontSize="xl"
             color="brand.forest"
@@ -173,7 +150,6 @@ export default function BookCard({
           >
             {title}
           </Card.Title>
-
           <Text
             fontSize="sm"
             color="gray.500"
@@ -182,9 +158,7 @@ export default function BookCard({
           >
             {author}
           </Text>
-
         </VStack>
-
         <Box
           h="72px"
           overflow="hidden"
@@ -198,9 +172,7 @@ export default function BookCard({
             {description}
           </Text>
         </Box>
-
         <Box mt="auto">
-
           <Text
             fontSize="2xl"
             fontWeight="bold"
@@ -208,7 +180,6 @@ export default function BookCard({
           >
             ${price}
           </Text>
-
           <Text
             fontSize="sm"
             color={stock > 0 ? "brand.sage" : "brand.clay"}
@@ -218,13 +189,9 @@ export default function BookCard({
               ? `Stock disponible: ${stock}`
               : "Sin stock"}
           </Text>
-
         </Box>
-
       </Card.Body>
-
       <Card.Footer gap="3">
-
         <Button
           flex="1"
           bg="brand.forest"
@@ -241,7 +208,6 @@ export default function BookCard({
         >
           Editar
         </Button>
-
         {isActive ? (
           <Button
             flex="1"
@@ -270,9 +236,7 @@ export default function BookCard({
             Reactivar
           </Button>
         )}
-
       </Card.Footer>
-
     </Card.Root>
   )
 }

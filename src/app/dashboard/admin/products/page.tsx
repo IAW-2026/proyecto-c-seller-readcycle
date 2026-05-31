@@ -17,7 +17,7 @@ import { redirect } from "next/navigation"
 import prisma from "../../../../lib/prisma"
 import { isAdmin } from "../../../../lib/isAdmin"
 
-import AdminDeleteProductButton from "../../../../components/admin-delete-product-button"
+import AdminDeleteProductButton from "../../../../components/admin/deleteProductButton"
 
 export default async function AdminProductsPage() {
   const admin = await isAdmin()

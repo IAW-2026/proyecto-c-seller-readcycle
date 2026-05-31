@@ -1,5 +1,3 @@
-"use client"
-
 import { Box, VStack, HStack, Center, Icon, Text } from "@chakra-ui/react"
 import { LuCamera, LuTag, LuDollarSign } from "react-icons/lu"
 

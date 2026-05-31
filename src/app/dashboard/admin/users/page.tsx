@@ -17,9 +17,9 @@ import {
 
 import { redirect } from "next/navigation"
 import { isAdmin } from "../../../../lib/isAdmin"
-import AdminDeleteUserButton from "../../../../components/admin-delete-user-button"
-import AdminEditUserButton from "../../../../components/admin-edit-user-button"
-import CreateUserForm from "../../../../components/create-user-form"
+import AdminDeleteUserButton from "../../../../components/admin/deleteUserButton"
+import AdminEditUserButton from "../../../../components/admin/editUserButton"
+import CreateUserForm from "../../../../components/admin/createUserForm"
 
 export default async function AdminUsersPage() {
   const admin = await isAdmin()
@@ -40,9 +40,7 @@ export default async function AdminUsersPage() {
      <Box bg="brand.beige" minH="100vh" py={2}>  
       <Container maxW="1400px" py="10">
         <VStack align="stretch" gap="8">
-
           <Stack gap="2">
-
             <Heading
               fontSize="5xl"
               color="brand.forest"
@@ -51,11 +49,8 @@ export default async function AdminUsersPage() {
             >
               Administración de Usuarios
             </Heading>
-
           </Stack>
-
           <CreateUserForm />
-
           <Box
             bg="white"
             borderWidth="1px"
@@ -64,44 +59,30 @@ export default async function AdminUsersPage() {
             overflow="hidden"
             shadow="md"
           >
-
             <Table.Root>
-
               <Table.Header bg="gray.50">
-
                 <Table.Row>
-
                   <Table.ColumnHeader py="4">
                     Usuario
                   </Table.ColumnHeader>
-
                   <Table.ColumnHeader py="4">
                     Email
                   </Table.ColumnHeader>
-
                   <Table.ColumnHeader py="4">
                     Roles
                   </Table.ColumnHeader>
-
                   <Table.ColumnHeader
                     py="4"
                     w="220px"
                   >
                     Acciones
                   </Table.ColumnHeader>
-
                 </Table.Row>
-
               </Table.Header>
-
               <Table.Body>
-
                 {users.data
                   .filter((user) => user.id !== userId)
-                  .map((user) => {
-                    const roles =
-                      (user.publicMetadata.roles as string[]) || []
-
+                  .map((user) => { const roles = (user.publicMetadata.roles as string[]) || []
                     return (
                       <Table.Row
                         key={user.id}
@@ -109,37 +90,26 @@ export default async function AdminUsersPage() {
                           bg: "gray.50",
                         }}
                       >
-
                         <Table.Cell py="5">
-
                           <VStack
                             align="start"
                             gap="0"
                           >
-
                             <Text
                               fontWeight="700"
                               color="brand.forest"
                             >
                               {user.firstName} {user.lastName}
                             </Text>
-
                           </VStack>
-
                         </Table.Cell>
-
                         <Table.Cell py="5">
-
                           <Text color="gray.700">
                             {user.emailAddresses[0]?.emailAddress}
                           </Text>
-
                         </Table.Cell>
-
                         <Table.Cell py="5">
-
                           <HStack gap="2">
-
                             {roles.map((role) => (
                               <Badge
                                 key={role}
@@ -155,13 +125,9 @@ export default async function AdminUsersPage() {
                             ))}
 
                           </HStack>
-
                         </Table.Cell>
-
                         <Table.Cell py="5">
-
                           <HStack gap="3">
-
                             <AdminEditUserButton
                               user={{
                                 id: user.id,
@@ -170,25 +136,17 @@ export default async function AdminUsersPage() {
                                 roles,
                               }}
                             />
-
                             <AdminDeleteUserButton
                               userId={user.id}
                             />
-
                           </HStack>
-
                         </Table.Cell>
-
                       </Table.Row>
                     )
                   })}
-
               </Table.Body>
-
             </Table.Root>
-
           </Box>
-
         </VStack>
       </Container>
     </Box>

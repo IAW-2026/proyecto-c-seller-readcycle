@@ -14,7 +14,6 @@ import { useState } from "react"
 
 export default function CreateUserForm() {
   const router = useRouter()
-
   const [name, setName] = useState("")
   const [surname, setSurname] = useState("")
   const [email, setEmail] = useState("")
@@ -38,7 +37,6 @@ export default function CreateUserForm() {
         }),
       }
     )
-
     if (response.ok) {
       setName("")
       setSurname("")
@@ -58,9 +56,7 @@ export default function CreateUserForm() {
       bg="white"
     >
       <VStack gap="4">
-
         <HStack w="full">
-
           <Input
             placeholder="Nombre"
             value={name}
@@ -68,7 +64,6 @@ export default function CreateUserForm() {
               setName(e.target.value)
             }
           />
-
           <Input
             placeholder="Apellido"
             value={surname}
@@ -78,7 +73,6 @@ export default function CreateUserForm() {
           />
 
         </HStack>
-
         <Input
           placeholder="Email"
           value={email}
@@ -86,7 +80,6 @@ export default function CreateUserForm() {
             setEmail(e.target.value)
           }
         />
-
         <Input
           placeholder="Password"
           type="password"
@@ -95,7 +88,6 @@ export default function CreateUserForm() {
             setPassword(e.target.value)
           }
         />
-
         <NativeSelect.Root>
             <NativeSelect.Field
                 value={role}
@@ -112,7 +104,6 @@ export default function CreateUserForm() {
                 </option>
             </NativeSelect.Field>
         </NativeSelect.Root>
-
         <Button
           w="full"
           bg="brand.forest"
@@ -121,7 +112,6 @@ export default function CreateUserForm() {
         >
           Crear usuario
         </Button>
-
       </VStack>
     </Box>
   )

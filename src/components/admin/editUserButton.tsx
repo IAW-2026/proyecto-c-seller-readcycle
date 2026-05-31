@@ -85,9 +85,7 @@ export default function AdminEditUserButton({
 
   return (
     <Dialog.Root>
-
       <Dialog.Trigger asChild>
-
         <Button
             size="sm"
             bg="brand.sage"
@@ -100,15 +98,10 @@ export default function AdminEditUserButton({
             >
             Editar
         </Button>
-
       </Dialog.Trigger>
-
       <Portal>
-
         <Dialog.Backdrop />
-
         <Dialog.Positioner>
-
           <Dialog.Content
             borderRadius="2xl"
             maxW="500px"
@@ -116,14 +109,11 @@ export default function AdminEditUserButton({
             maxH="90vh"
             overflow="hidden"
           >
-
             <Dialog.Header p="6" pb="2">
-
               <VStack
                 align="start"
                 gap="0"
               >
-
                 <Dialog.Title
                   fontSize="2xl"
                   fontWeight="800"
@@ -131,32 +121,24 @@ export default function AdminEditUserButton({
                 >
                   Editar Usuario
                 </Dialog.Title>
-
                 <Text
                   fontSize="sm"
                   color="gray.500"
                 >
                   Modificá la información del usuario
                 </Text>
-
               </VStack>
-
             </Dialog.Header>
-
             <Dialog.Body
               p="6"
               overflowY="auto"
               flex="1"
             >
-
               <Stack gap="5">
-
                 <Field.Root>
-
                   <Field.Label>
                     Nombre
                   </Field.Label>
-
                   <Input
                     borderRadius="lg"
                     value={firstName}
@@ -166,15 +148,11 @@ export default function AdminEditUserButton({
                       )
                     }
                   />
-
                 </Field.Root>
-
                 <Field.Root>
-
                   <Field.Label>
                     Apellido
                   </Field.Label>
-
                   <Input
                     borderRadius="lg"
                     value={lastName}
@@ -184,18 +162,14 @@ export default function AdminEditUserButton({
                       )
                     }
                   />
-
                 </Field.Root>
-
                 <VStack
                   align="start"
                   gap="3"
                 >
-
                   <Text fontWeight="600">
                     Roles
                   </Text>
-
                   <Checkbox.Root
                     checked={roles.includes(
                       "admin"
@@ -210,7 +184,6 @@ export default function AdminEditUserButton({
                       Admin
                     </Checkbox.Label>
                   </Checkbox.Root>
-
                   <Checkbox.Root
                     checked={roles.includes(
                       "seller"
@@ -225,19 +198,12 @@ export default function AdminEditUserButton({
                       Seller
                     </Checkbox.Label>
                   </Checkbox.Root>
-
                 </VStack>
-
               </Stack>
-
             </Dialog.Body>
-
             <Dialog.Footer p="6">
-
               <HStack w="full">
-
                 <Dialog.ActionTrigger asChild>
-
                   <Button
                     variant="outline"
                     borderRadius="lg"
@@ -245,9 +211,7 @@ export default function AdminEditUserButton({
                   >
                     Cancelar
                   </Button>
-
                 </Dialog.ActionTrigger>
-
                 <Button
                   onClick={onSubmit}
                   loading={loading}
@@ -257,17 +221,11 @@ export default function AdminEditUserButton({
                 >
                   Guardar cambios
                 </Button>
-
               </HStack>
-
             </Dialog.Footer>
-
           </Dialog.Content>
-
         </Dialog.Positioner>
-
       </Portal>
-
     </Dialog.Root>
   )
 }

@@ -4,23 +4,22 @@ import { Button } from "@chakra-ui/react"
 import { useRouter } from "next/navigation"
 
 interface Props {
-  productId: string
+  userId: string
 }
 
-export default function AdminDeleteProductButton({
-  productId,
+export default function AdminDeleteUserButton({
+  userId,
 }: Props) {
   const router = useRouter()
 
   async function handleDelete() {
     const confirmed = window.confirm(
-      "¿Seguro que querés eliminar este producto?"
+      "¿Seguro que querés eliminar este usuario?"
     )
 
     if (!confirmed) return
-
     const response = await fetch(
-      `/api/admin/products/${productId}`,
+      `/api/admin/users/${userId}`,
       {
         method: "DELETE",
       }
@@ -32,14 +31,17 @@ export default function AdminDeleteProductButton({
   }
 
   return (
-    <Button
-      flex="1"
+  <Button
+      size="sm"
       bg="brand.clay"
-      color="brand.beige"
-      borderRadius="xl"
-      fontWeight="600"
+      color="white"
+      borderRadius="lg"
+      w="90px"
       onClick={handleDelete}
-      >
+      _hover={{
+        opacity: 0.9,
+      }}
+    >
       Eliminar
     </Button>
   )

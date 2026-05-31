@@ -20,7 +20,7 @@ import {
   useUser
 } from "@clerk/nextjs"
 
-import UserButton from "../components/clerk-user-button"
+import UserButton from "./clerkUserButton"
 
 export function Navbar() {
   const { user } = useUser()

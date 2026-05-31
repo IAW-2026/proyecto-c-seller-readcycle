@@ -15,7 +15,7 @@ import {
   Button,
 } from "@chakra-ui/react"
 
-import BookCard from "../../components/book-card"
+import BookCard from "../../components/books/bookCard"
 
 interface Publication {
   id: string
