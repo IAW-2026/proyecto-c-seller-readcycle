@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Seller App
 
-## Getting Started
+Aplicación **Seller App** del [Proyecto IAW 2026](https://iaw-2026.github.io/proyecto/) — comisión ReadCycle.
 
-First, run the development server:
+Esta app corresponde al módulo de gestión de vendedores del proyecto tipo **C (Marketplace)**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Descripción
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Seller App es la aplicación utilizada por los vendedores de ReadCycle para administrar la venta de libros usados dentro del marketplace.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+La plataforma permite:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Publicar libros para la venta.
+- Editar y eliminar publicaciones.
+- Gestionar categorías de libros.
+- Consultar órdenes realizadas.
+- Administrar la información personal del vendedor.
+- Gestionar direcciones de envío.
+- Acceder a funcionalidades administrativas para el control de usuarios y categorías.
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+La aplicación está disponible en: [Vercel](https://proyecto-c-seller-readcycle.vercel.app)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Credenciales de prueba
+## Usuarios no administradores
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Email: juantapia@hotmail.com
+- Contraseña: readcycle
 
-## Deploy on Vercel
+- Email: carlitos@gmail.com
+- Contraseña: readcycle
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Email: tini@gmail.com
+- Contraseña: readcycle
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Email: laugonzalez@yahoo.com
+- Contraseña: readcycle
+
+## Usuarios administradores
+
+- Email: fedeurq67@gmail.com
+- Contraseña: readcycle
+
+- Email: julilopez@gmail.com
+- Contraseña: readcycle
+
+## Instrucciones extra
+- En la sección Órdenes existe un botón "Crear orden" que permite generar órdenes de prueba utilizando un carrito simulado. Las órdenes de ejemplo pertenecen al usuario `fedeurq67@gmail.com`. Si las órdenes ya fueron generadas, no se recomienda volver a presionar el botón, ya que se intentará crear nuevas órdenes con los mismos libros y podría producirse un error por falta de stock.
+
+- Los usuarios creados por un administrador deberán completar el proceso de autenticación al iniciar sesión por primera vez.
+
+## Enunciado
+
+https://iaw-2026.github.io/proyecto/
