@@ -87,15 +87,12 @@ export default function ProductsPage() {
 
   return (
     <Box bg="brand.beige" minH="100vh" py="12">
-
       <Container maxW="1200px">
-
         <Stack
           gap="3"
           mb="12"
           textAlign={{ base: "center", md: "left" }}
         >
-
           <Heading
             as="h1"
             fontSize={{ base: "3xl", md: "5xl" }}
@@ -105,20 +102,17 @@ export default function ProductsPage() {
           >
             Mis Publicaciones
           </Heading>
-
           <Flex
             align="center"
             gap="4"
             justify={{ base: "center", md: "flex-start" }}
           >
-
             <Box
               w="50px"
               h="3px"
               bg="brand.clay"
               borderRadius="full"
             />
-
             <Text
               color="gray.600"
               fontSize="lg"
@@ -126,13 +120,9 @@ export default function ProductsPage() {
             >
               Gestiona tu biblioteca personal
             </Text>
-
           </Flex>
-
         </Stack>
-
         {loading ? (
-
           <Center py="20">
             <Spinner size="xl" />
           </Center>
@@ -146,9 +136,7 @@ export default function ProductsPage() {
             px="6"
             textAlign="center"
           >
-
             <Stack maxW="500px" gap="6">
-
               <Text
                 fontSize="3xl"
                 fontWeight="700"
@@ -156,20 +144,15 @@ export default function ProductsPage() {
               >
                 Tu estante está vacío
               </Text>
-
               <Text
                 fontSize="lg"
                 color="gray.600"
               >
                 Publicá tu primer libro hoy y conectá con alguien que esté buscando tu próxima gran historia.
               </Text>
-
             </Stack>
-
           </Flex>
-
         ) : (
-
           <>
             <Grid
               templateColumns={{
@@ -180,9 +163,7 @@ export default function ProductsPage() {
               gap="8"
               alignItems="start"
             >
-
               {currentPublications.map((book) => (
-
                 <BookCard
                   key={book.id}
                   id={book.id}
@@ -195,11 +176,8 @@ export default function ProductsPage() {
                   category={book.category.name}
                   isActive={book.isActive}
                 />
-
               ))}
-
             </Grid>
-
             <Flex
               justify="center"
               align="center"
@@ -207,7 +185,6 @@ export default function ProductsPage() {
               mt="10"
               flexWrap="wrap"
             >
-
               <Button
                 onClick={() =>
                   setCurrentPage((prev) =>
@@ -223,14 +200,12 @@ export default function ProductsPage() {
               >
                 Anterior
               </Button>
-
               <Text
                 fontWeight="600"
                 color="brand.forest"
               >
                 Página {currentPage} de {totalPages}
               </Text>
-
               <Button
                 onClick={() =>
                   setCurrentPage((prev) =>
@@ -246,14 +221,10 @@ export default function ProductsPage() {
               >
                 Siguiente
               </Button>
-
             </Flex>
           </>
-
         )}
-
       </Container>
-
     </Box>
   )
 }

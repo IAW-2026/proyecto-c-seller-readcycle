@@ -43,7 +43,6 @@ export default async function AdminProductsPage() {
     <Box bg="brand.beige" minH="100vh" py={2}>
       <Container maxW="1400px" py="10">
         <VStack align="stretch" gap="8">
-
           <Stack gap="5">
             <Heading
             fontSize="5xl"
@@ -54,7 +53,6 @@ export default async function AdminProductsPage() {
             Administración de Productos
             </Heading>
           </Stack>
-
           <Box
             bg="white"
             borderWidth="1px"
@@ -64,36 +62,27 @@ export default async function AdminProductsPage() {
             shadow="sm"
           >
             <Table.Root>
-
               <Table.Header bg="brand.beige">
                 <Table.Row>
-
                   <Table.ColumnHeader py="4" >
                     Producto
                   </Table.ColumnHeader>
-
                   <Table.ColumnHeader py="4" >
                     Vendedor
                   </Table.ColumnHeader>
-
                   <Table.ColumnHeader py="4" >
                     Precio
                   </Table.ColumnHeader>
-
                   <Table.ColumnHeader py="4" >
                     Acciones
                   </Table.ColumnHeader>
-
                 </Table.Row>
               </Table.Header>
-
               <Table.Body>
                 {products.map((product) => (
                   <Table.Row key={product.id}>
-
                     <Table.Cell>
                       <HStack gap="4">
-
                         <Image
                           src={
                             product.images?.[0]?.url ||
@@ -104,36 +93,28 @@ export default async function AdminProductsPage() {
                           objectFit="cover"
                           borderRadius="xl"
                         />
-
                         <Text fontWeight="600">
                           {product.title}
                         </Text>
-
                       </HStack>
                     </Table.Cell>
-
                     <Table.Cell>
                       {product.seller.name}{" "}
                       {product.seller.surname}
                     </Table.Cell>
-
                     <Table.Cell>
                       ${product.price}
                     </Table.Cell>
-
                     <Table.Cell>
                       <AdminDeleteProductButton
                         productId={product.id}
                       />
                     </Table.Cell>
-
                   </Table.Row>
                 ))}
               </Table.Body>
-
             </Table.Root>
           </Box>
-
         </VStack>
       </Container>
     </Box> 

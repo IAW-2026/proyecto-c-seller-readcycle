@@ -170,7 +170,6 @@ export default function OrdersPage() {
           >
             Historial de ventas
           </Heading>
-
           <Flex
             align="center"
             justify="space-between"
@@ -187,7 +186,6 @@ export default function OrdersPage() {
                 bg="brand.clay"
                 borderRadius="full"
               />
-
               <Text
                 color="gray.600"
                 fontSize="lg"
@@ -196,7 +194,6 @@ export default function OrdersPage() {
                 realizadas
               </Text>
             </Flex>
-
             <Button
               bg="brand.forest"
               color="white"
@@ -206,7 +203,6 @@ export default function OrdersPage() {
             </Button>
           </Flex>
         </Stack>
-
         <OrdersList orders={orders} />
       </Container>
     </Box>

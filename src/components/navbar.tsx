@@ -56,27 +56,50 @@ export function Navbar() {
               />
             </NextLink>
           </Link>
-
-          <HStack gap="4" ml="10" display={{ base: "none", md: "flex" }}> 
+          <HStack 
+            gap="4" 
+            ml="10" 
+            display={{ base: "none", md: "flex" }}
+          > 
             <Link asChild href="/dashboard"> 
               <NextLink href="/dashboard"> 
-                <Button variant="ghost" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} > 
+                <Button variant="ghost" 
+                  color="brand.forest" 
+                  borderRadius="brand" 
+                  fontFamily="heading" 
+                  fontWeight="600" 
+                  px="4" 
+                  _hover={{ bg: "brand.sand" }}
+                > 
                   Mis publicaciones 
                 </Button>
               </NextLink> 
             </Link>
-
            <Link asChild href="/dashboard/new"> 
             <NextLink href="/dashboard/new"> 
-                <Button variant="ghost" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} > 
+                <Button 
+                  variant="ghost" 
+                  color="brand.forest" 
+                  borderRadius="brand" 
+                  fontFamily="heading" 
+                  fontWeight="600" 
+                  px="4" 
+                  _hover={{ bg: "brand.sand" }} 
+                > 
                   Crear nueva publicación 
                 </Button> 
               </NextLink> 
             </Link>
-
             <Link asChild href="/dashboard/orders"> 
               <NextLink href="/dashboard/orders"> 
-                <Button variant="ghost" color="brand.forest" borderRadius="brand" fontFamily="heading" fontWeight="600" px="4" _hover={{ bg: "brand.sand" }} > 
+                <Button variant="ghost" 
+                  color="brand.forest" 
+                  borderRadius="brand" 
+                  fontFamily="heading" 
+                  fontWeight="600" 
+                  px="4" 
+                  _hover={{ bg: "brand.sand" }} 
+                > 
                   Historial de ventas 
                 </Button> 
               </NextLink> 
@@ -109,7 +132,6 @@ export function Navbar() {
               )}
           </HStack>
           <Spacer />
-
           <HStack gap="3">
             <Show when="signed-out">
               <SignInButton mode="modal">
@@ -120,7 +142,6 @@ export function Navbar() {
                   Iniciar sesión
                 </Button>
               </SignInButton>
-
               <SignUpButton mode="modal">
                 <Button
                   bg="brand.forest"
@@ -131,7 +152,6 @@ export function Navbar() {
                 </Button>
               </SignUpButton>
             </Show>
-
             <Show when="signed-in">
               <UserButton />
             </Show>

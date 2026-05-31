@@ -113,29 +113,56 @@ export default function EditBookPage() {
     )
   }
   return (
-    <Box bg="brand.beige" minH="100vh" py={12}>
+    <Box 
+      bg="brand.beige" 
+      minH="100vh" 
+      py={12}
+    >
       <Container maxW="1200px">
-        <Stack gap="3" mb="12">
-          <Heading fontSize="5xl" color="brand.forest" fontWeight="800">
+        <Stack
+          gap="3" 
+          mb="12"
+         >
+          <Heading 
+            fontSize="5xl" 
+            color="brand.forest" 
+            fontWeight="800"
+          >
             Edita tu libro
           </Heading>
-          <Flex align="center" gap="4">
-            <Box w="50px" h="3px" bg="brand.clay" borderRadius="full" />
-            <Text color="gray.600" fontSize="lg">
+          <Flex 
+            align="center" 
+            gap="4"
+          >
+            <Box 
+              w="50px" 
+              h="3px" 
+              bg="brand.clay" 
+              borderRadius="full" 
+            />
+            <Text 
+              color="gray.600" 
+              fontSize="lg"
+            >
               Modifica los campos necesarios para actualizar tu publicación
             </Text>
           </Flex>
         </Stack>
 
         {!hasAddress && (
-          <Alert.Root status="warning" rounded="2xl" bg="orange.50" border="1px solid" borderColor="orange.200">
+          <Alert.Root 
+            status="warning" 
+            rounded="2xl" 
+            bg="orange.50" 
+            border="1px solid" 
+            borderColor="orange.200"
+          >
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title>Debes cargar una dirección antes de editar</Alert.Title>
             </Alert.Content>
           </Alert.Root>
         )}
-
         {hasAddress && (
           <SimpleGrid columns={{ base: 1, lg: 3 }} gap={8} alignItems="start">
             <Box gridColumn={{ lg: "span 2" }}>

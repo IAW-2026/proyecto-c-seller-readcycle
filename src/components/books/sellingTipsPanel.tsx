@@ -9,17 +9,50 @@ export const SellingTipsPanel = () => {
   ]
 
   return (
-    <Box p={6} borderRadius="brand" border="1px solid" borderColor="gray.200" bg="white">
-      <VStack align="stretch" gap={6}>
-        <Text fontWeight="bold" color="brand.forest">Consejos para vender más</Text>
+    <Box 
+      p={6} 
+      borderRadius="brand" 
+      border="1px solid" 
+      borderColor="gray.200" 
+      bg="white"
+    >
+      <VStack 
+        align="stretch" 
+        gap={6}
+      >
+        <Text 
+          fontWeight="bold" 
+          color="brand.forest"
+        >
+          Consejos para vender más
+        </Text>
         {tips.map((tip, i) => (
-          <HStack key={i} align="start" gap={3}>
-            <Center boxSize="40px" bg="brand.beige" borderRadius="md" flexShrink={0}>
+          <HStack 
+            key={i} 
+            align="start" 
+            gap={3}
+          >
+            <Center 
+              boxSize="40px" 
+              bg="brand.beige" 
+              borderRadius="md" 
+              flexShrink={0}
+            >
               <Icon as={tip.icon} color="brand.sage" />
             </Center>
             <VStack align="start" gap={0}>
-              <Text fontSize="sm" fontWeight="bold">{tip.title}</Text>
-              <Text fontSize="xs" color="gray.600">{tip.desc}</Text>
+              <Text 
+                fontSize="sm" 
+                fontWeight="bold"
+              >
+                {tip.title}
+              </Text>
+              <Text 
+                fontSize="xs" 
+                color="gray.600"
+              >
+                {tip.desc}
+              </Text>
             </VStack>
           </HStack>
         ))}

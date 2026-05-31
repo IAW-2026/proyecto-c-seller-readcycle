@@ -26,7 +26,6 @@ export default async function AdminPage() {
     <Box bg="brand.beige" minH="100vh" py={2}> 
       <Container maxW="1400px" py="10" >
         <VStack align="stretch" gap="10">
-
           <Stack gap="5">
             <Heading
               fontSize="5xl"
@@ -36,7 +35,6 @@ export default async function AdminPage() {
             >
               Panel de Administración
             </Heading>
-
             <Flex align="center" gap="4">
               <Box
                 w="50px"
@@ -44,7 +42,6 @@ export default async function AdminPage() {
                 bg="brand.clay"
                 borderRadius="full"
               />
-
               <Text
                 color="gray.600"
                 fontSize="lg"
@@ -53,12 +50,10 @@ export default async function AdminPage() {
               </Text>
             </Flex>
           </Stack>
-
           <SimpleGrid
             columns={{ base: 1, md: 2 }}
             gap="6"
           >
-
             <Box
               bg="white"
               borderWidth="1px"
@@ -77,22 +72,18 @@ export default async function AdminPage() {
                 gap="5"
                 h="full"
               >
-
                 <Heading
                   size="lg"
                   color="brand.forest"
                 >
                   Usuarios
                 </Heading>
-
                 <Text
                   color="gray.600"
                   flex="1"
                 >
-                  Crear, visualizar y eliminar
-                  usuarios del sistema.
+                  Crear, visualizar y eliminar usuarios del sistema.
                 </Text>
-
                 <Button
                   asChild
                   bg="brand.forest"
@@ -107,10 +98,8 @@ export default async function AdminPage() {
                     Administrar usuarios
                   </Link>
                 </Button>
-
               </VStack>
             </Box>
-
             <Box
               bg="white"
               borderWidth="1px"
@@ -129,22 +118,18 @@ export default async function AdminPage() {
                 gap="5"
                 h="full"
               >
-
                 <Heading
                   size="lg"
                   color="brand.forest"
                 >
                   Productos
                 </Heading>
-
                 <Text
                   color="gray.600"
                   flex="1"
                 >
-                  Visualizá y eliminá publicaciones
-                  de cualquier vendedor.
+                  Visualizá y eliminá publicaciones de cualquier vendedor.
                 </Text>
-
                 <Button
                   asChild
                   bg="brand.clay"
@@ -159,12 +144,9 @@ export default async function AdminPage() {
                     Administrar productos
                   </Link>
                 </Button>
-
               </VStack>
             </Box>
-
           </SimpleGrid>
-
         </VStack>
       </Container>
      </Box>
