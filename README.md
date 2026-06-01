@@ -25,30 +25,23 @@ La aplicación está disponible en: [Vercel](https://proyecto-c-seller-readcycle
 ## Credenciales de prueba
 ## Usuarios no administradores
 
-- Email: juantapia@hotmail.com
-- Contraseña: readcycle
+- Email: seller+clerktest@iaw.com
+- Contraseña: iawuser#
 
-- Email: carlitos@gmail.com
-- Contraseña: readcycle
+- Email: seller2+clerktest@iaw.com
+- Contraseña: iawuser#
 
-- Email: tini@gmail.com
-- Contraseña: readcycle
+## Usuario administradores
 
-- Email: laugonzalez@yahoo.com
-- Contraseña: readcycle
-
-## Usuarios administradores
-
-- Email: fedeurq67@gmail.com
-- Contraseña: readcycle
-
-- Email: julilopez@gmail.com
-- Contraseña: readcycle
+- Email: admin+clerktest@iaw.com
+- Contraseña: iawuser#
 
 ## Instrucciones extra
-- En la sección Órdenes existe un botón "Crear orden" que permite generar órdenes de prueba utilizando un carrito simulado. Las órdenes de ejemplo pertenecen al usuario `fedeurq67@gmail.com`. Si las órdenes ya fueron generadas, no se recomienda volver a presionar el botón, ya que se intentará crear nuevas órdenes con los mismos libros y podría producirse un error por falta de stock.
+- En la sección Órdenes existe un botón "Crear orden" que permite generar órdenes de prueba utilizando un carrito simulado. Las órdenes de ejemplo pertenecen al usuario `seller+clerktest@iaw.com`. Si las órdenes ya fueron generadas (aparecen), no se recomienda volver a presionar el botón, ya que se intentará crear nuevas órdenes con los mismos libros y podría producirse un error por falta de stock. Si se quiere testear, solo cambiar los libros del mockCart que se encuentra en src/app/dashboard/orders/page.tsx
 
 - Los usuarios creados por un administrador deberán completar el proceso de autenticación al iniciar sesión por primera vez.
+
+- Las Categorias deben crearse en Prisma Studio o desde Supabase (hay creadas 3 categorias para realizar la publicacion de libros)
 
 ## Enunciado
 

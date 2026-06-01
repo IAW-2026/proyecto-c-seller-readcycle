@@ -95,14 +95,14 @@ export default function OrdersPage() {
         items: [
           {
             productId:
-              "cmppv6yjb0000wswg5hpvpumw",
+              "cmpvkvrey000bkswgrrblapv6",
 
             quantity: 1,
           },
 
           {
             productId:
-              "cmpof99y20002fowg9de2adfm",
+              "cmpvl35di000hkswgu8gzjc4a",
 
             quantity: 1,
           },
