@@ -32,11 +32,11 @@ export function AddressForm() {
         if (!response.ok) return
         const data = await response.json()
         setAddress({
-          street: data.street || "",
-          number: data.number || "",
-          city: data.city || "",
-          province: data.province || "",
-          zipCode: data.zipCode || "",
+          street: data?.street ?? "",
+          number: data?.number?.toString() ?? "",
+          city: data?.city ?? "",
+          province: data?.province ?? "",
+          zipCode: data?.zipCode ?? "",
         })
       } catch (error) {
         console.error(error)
