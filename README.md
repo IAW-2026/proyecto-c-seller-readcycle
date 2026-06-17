@@ -25,15 +25,15 @@ La aplicación está disponible en: [Vercel](https://proyecto-c-seller-readcycle
 ## Credenciales de prueba
 ## Usuarios no administradores
 
-- Email: seller+clerktest@iaw.com
+- Email: seller+clerk_test@iaw.com
 - Contraseña: iawuser#
 
-- Email: seller2+clerktest@iaw.com
+- Email: seller2+clerk_test@iaw.com
 - Contraseña: iawuser#
 
 ## Usuario administradores
 
-- Email: admin+clerktest@iaw.com
+- Email: admin+clerk_test@iaw.com
 - Contraseña: iawuser#
 
 ## Instrucciones extra
