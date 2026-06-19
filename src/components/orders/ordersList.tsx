@@ -19,8 +19,11 @@ type Order = {
   total: number
   shippingCost: number
 
-  status: string
-  shippingStatus: string
+  paymentId: string | null
+  shippingId: string | null
+
+  paymentStatus: string | null
+  shippingStatus: string | null
 
   buyerId: string
 
@@ -112,8 +115,10 @@ export function OrdersList({
                   bg="brand.sage"
                   color="white"
                 >
-                  {order.status}
+                  {order.paymentStatus ??
+                    "SIN PAGO"}
                 </Badge>
+
                 <Badge
                   px={3}
                   py={1}
@@ -121,7 +126,8 @@ export function OrdersList({
                   bg="brand.clay"
                   color="white"
                 >
-                  {order.shippingStatus}
+                  {order.shippingStatus ??
+                    "SIN ENVÍO"}
                 </Badge>
               </HStack>
             </Flex>

@@ -50,12 +50,87 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(orders)
+    const enrichedOrders = await Promise.all(
+      orders.map(async (order) => {
+        let paymentStatus: string | null = null
+        let shippingStatus: string | null = null
+
+        try {
+          if (order.paymentId) {
+            const paymentResponse =
+              await fetch(
+                `${process.env.PAYMENTS_API_URL}/api/payments/${order.paymentId}`,
+                {
+                  headers: {
+                    "X-API-Key":
+                      process.env
+                        .PAYMENTS_API_KEY!,
+                  },
+                }
+              )
+
+            if (paymentResponse.ok) {
+              const payment =
+                await paymentResponse.json()
+
+              // TODO:
+              // Verificar la estructura real
+              // de la respuesta de Payments.
+              paymentStatus =
+                payment.status ?? null
+            }
+          }
+
+          if (order.shippingId) {
+            const shippingResponse =
+              await fetch(
+                `${process.env.SHIPPING_API_URL}/api/shipments/${order.shippingId}`,
+                {
+                  headers: {
+                    "X-API-Key":
+                      process.env
+                        .SHIPPING_API_KEY!,
+                  },
+                }
+              )
+
+            if (shippingResponse.ok) {
+              const shipment =
+                await shippingResponse.json()
+
+              // TODO:
+              // Verificar la estructura real
+              // de la respuesta de Shipping.
+              shippingStatus =
+                shipment.status ?? null
+            }
+          }
+        } catch (error) {
+          console.error(
+            `[ORDER_ENRICHMENT] ${order.id}`,
+            error
+          )
+        }
+
+        return {
+          ...order,
+          paymentStatus,
+          shippingStatus,
+        }
+      })
+    )
+
+    return NextResponse.json(
+      enrichedOrders
+    )
   } catch (error) {
     console.error("[ORDERS_GET]", error)
 
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error:
+          "Internal server error",
+      },
       { status: 500 }
     )
   }
