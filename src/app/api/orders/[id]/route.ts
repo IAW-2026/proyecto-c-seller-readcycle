@@ -15,33 +15,49 @@ export async function GET(
 ) {
   try {
     const { userId } = await auth()
+    const apiKey = req.headers.get("X-API-Key")
 
-    if (!userId) {
+    let isAuthorized = false
+    let isExternalService = false
+
+    // 1. Check API Key first (for external services)
+    if (apiKey) {
+      if (
+        apiKey === process.env.BUYER_API_KEY ||
+        apiKey === process.env.PAYMENTS_API_KEY
+      ) {
+        isAuthorized = true
+        isExternalService = true
+      }
+    }
+
+    // 2. Check Clerk Session (for frontend / dashboard)
+    let seller: any = null
+    if (!isAuthorized && userId) {
+      seller = await prisma.user.findUnique({
+        where: {
+          clerkUserId: userId,
+        },
+      })
+      if (seller) {
+        isAuthorized = true
+      }
+    }
+
+    if (!isAuthorized) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       )
     }
 
-    const seller = await prisma.user.findUnique({
-      where: {
-        clerkUserId: userId,
-      },
-    })
-
-    if (!seller) {
-      return NextResponse.json(
-        { error: "Seller not found" },
-        { status: 404 }
-      )
-    }
-
     const { id } = await params
 
+    // 3. Query the order
     const order = await prisma.order.findFirst({
       where: {
         id,
-        sellerId: seller.id,
+        ...(isExternalService ? {} : { sellerId: seller?.id }),
       },
 
       include: {
