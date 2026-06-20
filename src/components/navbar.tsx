@@ -24,7 +24,7 @@ import UserButton from "./clerkUserButton"
 
 export function Navbar() {
   const { user } = useUser()
-  const isAdmin = (user?.publicMetadata?.roles as string[])?.includes("admin")
+  const isAdmin = (user?.publicMetadata?.roles as string[])?.includes("ADMIN")
   return (
     <Box
       as="header"
@@ -56,80 +56,80 @@ export function Navbar() {
               />
             </NextLink>
           </Link>
-          <HStack 
-            gap="4" 
-            ml="10" 
+          <HStack
+            gap="4"
+            ml="10"
             display={{ base: "none", md: "flex" }}
-          > 
-            <Link asChild href="/dashboard"> 
-              <NextLink href="/dashboard"> 
-                <Button variant="ghost" 
-                  color="brand.forest" 
-                  borderRadius="brand" 
-                  fontFamily="heading" 
-                  fontWeight="600" 
-                  px="4" 
+          >
+            <Link asChild href="/dashboard">
+              <NextLink href="/dashboard">
+                <Button variant="ghost"
+                  color="brand.forest"
+                  borderRadius="brand"
+                  fontFamily="heading"
+                  fontWeight="600"
+                  px="4"
                   _hover={{ bg: "brand.sand" }}
-                > 
-                  Mis publicaciones 
+                >
+                  Mis publicaciones
                 </Button>
-              </NextLink> 
+              </NextLink>
             </Link>
-           <Link asChild href="/dashboard/new"> 
-            <NextLink href="/dashboard/new"> 
-                <Button 
-                  variant="ghost" 
-                  color="brand.forest" 
-                  borderRadius="brand" 
-                  fontFamily="heading" 
-                  fontWeight="600" 
-                  px="4" 
-                  _hover={{ bg: "brand.sand" }} 
-                > 
-                  Crear nueva publicación 
-                </Button> 
-              </NextLink> 
+            <Link asChild href="/dashboard/new">
+              <NextLink href="/dashboard/new">
+                <Button
+                  variant="ghost"
+                  color="brand.forest"
+                  borderRadius="brand"
+                  fontFamily="heading"
+                  fontWeight="600"
+                  px="4"
+                  _hover={{ bg: "brand.sand" }}
+                >
+                  Crear nueva publicación
+                </Button>
+              </NextLink>
             </Link>
-            <Link asChild href="/dashboard/orders"> 
-              <NextLink href="/dashboard/orders"> 
-                <Button variant="ghost" 
-                  color="brand.forest" 
-                  borderRadius="brand" 
-                  fontFamily="heading" 
-                  fontWeight="600" 
-                  px="4" 
-                  _hover={{ bg: "brand.sand" }} 
-                > 
-                  Historial de ventas 
-                </Button> 
-              </NextLink> 
+            <Link asChild href="/dashboard/orders">
+              <NextLink href="/dashboard/orders">
+                <Button variant="ghost"
+                  color="brand.forest"
+                  borderRadius="brand"
+                  fontFamily="heading"
+                  fontWeight="600"
+                  px="4"
+                  _hover={{ bg: "brand.sand" }}
+                >
+                  Historial de ventas
+                </Button>
+              </NextLink>
+            </Link>
+            {isAdmin && (
+              <Link asChild href="/dashboard/admin">
+                <NextLink href="/dashboard/admin">
+                  <Button
+                    bg="brand.clay"
+                    color="white"
+                    borderRadius="brand"
+                    fontFamily="heading"
+                    fontWeight="600"
+                    px="5"
+                    py="2"
+                    shadow="sm"
+                    transition="0.2s"
+                    _hover={{
+                      bg: "red.700",
+                      transform: "translateY(-1px)",
+                    }}
+                    _active={{
+                      transform: "scale(0.98)",
+                    }}
+                  >
+                    Panel Administrador
+                  </Button>
+                </NextLink>
               </Link>
-              {isAdmin && (
-                <Link asChild href="/dashboard/admin">
-                  <NextLink href="/dashboard/admin">
-                    <Button
-                      bg="brand.clay"
-                      color="white"
-                      borderRadius="brand"
-                      fontFamily="heading"
-                      fontWeight="600"
-                      px="5"
-                      py="2"
-                      shadow="sm"
-                      transition="0.2s"
-                      _hover={{
-                        bg: "red.700",
-                        transform: "translateY(-1px)",
-                      }}
-                      _active={{
-                        transform: "scale(0.98)",
-                      }}
-                    >
-                      Panel Administrador
-                    </Button>
-                  </NextLink>
-                </Link>
-              )}
+            )}
           </HStack>
           <Spacer />
           <HStack gap="3">

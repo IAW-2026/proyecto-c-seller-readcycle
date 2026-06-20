@@ -10,11 +10,13 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const { userId } = await auth()
+  console.log("Usuario: ", userId)
 
   if (!userId) {
     redirect("/")
   }
   const clerkUser = await currentUser()
+  console.log("Usuario2: ", clerkUser)
 
   if (!clerkUser) {
     redirect("/")
@@ -26,37 +28,57 @@ export default async function DashboardLayout({
     },
   })
 
-if (!existingUser) {
-  await prisma.user.create({
-    data: {
-      clerkUserId: userId,
-      name:
-        clerkUser.firstName || "",
-      surname:
-        clerkUser.lastName || "",
-      email:
-        clerkUser.emailAddresses[0]
-          ?.emailAddress || "",
-    },
-  })
+  if (!existingUser) {
+    const email = clerkUser.emailAddresses[0]?.emailAddress || ""
 
-  const currentRoles =
-    (clerkUser.publicMetadata
-      ?.roles as string[]) || []
+    // Check if there is already a user with this email
+    const userWithSameEmail = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    })
 
-  if (currentRoles.length === 0) {
-    const client = await clerkClient()
-
-    await client.users.updateUserMetadata(
-      userId,
-      {
-        publicMetadata: {
-          roles: ["seller"],
+    if (userWithSameEmail) {
+      // Update their clerkUserId to the new one (migration)
+      await prisma.user.update({
+        where: {
+          id: userWithSameEmail.id,
         },
-      }
-    )
+        data: {
+          clerkUserId: userId,
+          name: clerkUser.firstName || userWithSameEmail.name,
+          surname: clerkUser.lastName || userWithSameEmail.surname,
+        },
+      })
+    } else {
+      // Create new user
+      await prisma.user.create({
+        data: {
+          clerkUserId: userId,
+          name: clerkUser.firstName || "",
+          surname: clerkUser.lastName || "",
+          email,
+        },
+      })
+    }
+
+    const currentRoles =
+      (clerkUser.publicMetadata
+        ?.roles as string[]) || []
+
+    if (currentRoles.length === 0) {
+      const client = await clerkClient()
+
+      await client.users.updateUserMetadata(
+        userId,
+        {
+          publicMetadata: {
+            roles: ["SELLER"],
+          },
+        }
+      )
+    }
   }
-}
   return (
     <main className="min-h-full flex flex-col" suppressHydrationWarning>
       <Provider>

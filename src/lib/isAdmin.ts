@@ -14,5 +14,5 @@ export async function isAdmin() {
   const roles =
     (user.publicMetadata.roles as string[]) || []
 
-  return roles.includes("admin")
+  return roles.includes("ADMIN")
 }
