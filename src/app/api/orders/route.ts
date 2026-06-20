@@ -59,7 +59,7 @@ export async function GET() {
           if (order.paymentId) {
             const paymentResponse =
               await fetch(
-                `${process.env.PAYMENTS_API_URL}/api/payments/${order.paymentId}`,
+                `${process.env.PAYMENTS_API_URL}/api/payments/transactions/${order.paymentId}`,
                 {
                   headers: {
                     "X-API-Key":
@@ -72,10 +72,6 @@ export async function GET() {
             if (paymentResponse.ok) {
               const payment =
                 await paymentResponse.json()
-
-              // TODO:
-              // Verificar la estructura real
-              // de la respuesta de Payments.
               paymentStatus =
                 payment.status ?? null
             }
@@ -97,12 +93,8 @@ export async function GET() {
             if (shippingResponse.ok) {
               const shipment =
                 await shippingResponse.json()
-
-              // TODO:
-              // Verificar la estructura real
-              // de la respuesta de Shipping.
               shippingStatus =
-                shipment.status ?? null
+                shipment.currentStatus ?? null
             }
           }
         } catch (error) {
