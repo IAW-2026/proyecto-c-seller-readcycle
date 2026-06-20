@@ -23,8 +23,11 @@ type Order = {
   total: number
   shippingCost: number
 
-  status: string
-  shippingStatus: string
+  paymentId: string | null
+  shippingId: string | null
+
+  paymentStatus: string | null
+  shippingStatus: string | null
 
   buyerId: string
 
@@ -85,58 +88,6 @@ export default function OrdersPage() {
     fetchOrders()
   }, [])
 
-  const createMockOrder = async () => {
-    try {
-      const mockCart = {
-        buyerId: "buyer_test_123",
-
-        shippingCost: 3000,
-
-        items: [
-          {
-            productId:
-              "cmpvkvrey000bkswgrrblapv6",
-
-            quantity: 1,
-          },
-
-          {
-            productId:
-              "cmpvl35di000hkswgu8gzjc4a",
-
-            quantity: 1,
-          },
-        ],
-      }
-
-      const res = await fetch("/api/orders", {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
-
-        body: JSON.stringify(mockCart),
-      })
-
-      if (!res.ok) {
-        const errorData = await res.json()
-
-        console.log(errorData)
-
-        throw new Error(errorData.error)
-      }
-
-      await fetchOrders()
-    } catch (error) {
-      console.error(
-        "[MOCK_ORDER]",
-        error
-      )
-    }
-  }
-
   if (loading) {
     return (
       <Flex
@@ -194,13 +145,6 @@ export default function OrdersPage() {
                 realizadas
               </Text>
             </Flex>
-            <Button
-              bg="brand.forest"
-              color="white"
-              onClick={createMockOrder}
-            >
-              Mockear compra
-            </Button>
           </Flex>
         </Stack>
         <OrdersList orders={orders} />

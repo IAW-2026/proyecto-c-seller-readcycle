@@ -50,12 +50,79 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(orders)
+    const enrichedOrders = await Promise.all(
+      orders.map(async (order) => {
+        let paymentStatus: string | null = null
+        let shippingStatus: string | null = null
+
+        try {
+          if (order.paymentId) {
+            const paymentResponse =
+              await fetch(
+                `${process.env.PAYMENTS_API_URL}/api/payments/transactions/${order.paymentId}`,
+                {
+                  headers: {
+                    "X-API-Key":
+                      process.env
+                        .PAYMENTS_API_KEY!,
+                  },
+                }
+              )
+
+            if (paymentResponse.ok) {
+              const payment =
+                await paymentResponse.json()
+              paymentStatus =
+                payment.status ?? null
+            }
+          }
+
+          if (order.shippingId) {
+            const shippingResponse =
+              await fetch(
+                `${process.env.SHIPPING_API_URL}/api/shipments/${order.shippingId}`,
+                {
+                  headers: {
+                    "X-API-Key":
+                      process.env
+                        .SHIPPING_API_KEY!,
+                  },
+                }
+              )
+
+            if (shippingResponse.ok) {
+              const shipment =
+                await shippingResponse.json()
+              shippingStatus =
+                shipment.currentStatus ?? null
+            }
+          }
+        } catch (error) {
+          console.error(
+            `[ORDER_ENRICHMENT] ${order.id}`,
+            error
+          )
+        }
+
+        return {
+          ...order,
+          paymentStatus,
+          shippingStatus,
+        }
+      })
+    )
+
+    return NextResponse.json(
+      enrichedOrders
+    )
   } catch (error) {
     console.error("[ORDERS_GET]", error)
 
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error:
+          "Internal server error",
+      },
       { status: 500 }
     )
   }
@@ -63,25 +130,16 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await auth()
+    const apiKey =
+      req.headers.get("X-API-Key")
 
-    if (!userId) {
+    if (
+      apiKey !==
+      process.env.BUYER_API_KEY
+    ) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
-      )
-    }
-
-    const seller = await prisma.user.findUnique({
-      where: {
-        clerkUserId: userId,
-      },
-    })
-
-    if (!seller) {
-      return NextResponse.json(
-        { error: "Seller not found" },
-        { status: 404 }
       )
     }
 
@@ -100,73 +158,107 @@ export async function POST(req: Request) {
       )
     }
 
+    const firstProduct =
+      await prisma.product.findUnique({
+        where: {
+          id: items[0].productId,
+        },
+      })
+
+    if (!firstProduct) {
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      )
+    }
+
+    const sellerId =
+      firstProduct.sellerId
+
     const order = await prisma.$transaction(
       async (tx) => {
         let total = 0
 
-        const validatedItems = await Promise.all(
-          items.map(async (item: any) => {
-            const product =
-              await tx.product.findUnique({
-                where: {
-                  id: item.productId,
-                },
-              })
+        const validatedItems =
+          await Promise.all(
+            items.map(
+              async (item: any) => {
+                const product =
+                  await tx.product.findUnique({
+                    where: {
+                      id: item.productId,
+                    },
+                  })
 
-            if (!product) {
-              throw new Error(
-                `Product ${item.productId} not found`
-              )
-            }
+                if (!product) {
+                  throw new Error(
+                    `Product ${item.productId} not found`
+                  )
+                }
 
-            if (
-              product.stock < item.quantity
-            ) {
-              throw new Error(
-                `Not enough stock for ${product.title}`
-              )
-            }
+                if (
+                  product.sellerId !==
+                  sellerId
+                ) {
+                  throw new Error(
+                    "Products belong to different sellers"
+                  )
+                }
 
-            total +=
-              product.price * item.quantity
+                if (
+                  product.stock <
+                  item.quantity
+                ) {
+                  throw new Error(
+                    `Not enough stock for ${product.title}`
+                  )
+                }
 
-            return {
-              product,
-              quantity: item.quantity,
-            }
-          })
-        )
+                total +=
+                  product.price *
+                  item.quantity
+
+                return {
+                  product,
+                  quantity:
+                    item.quantity,
+                }
+              }
+            )
+          )
 
         const createdOrder =
           await tx.order.create({
             data: {
-              sellerId: seller.id,
+              sellerId,
               buyerId,
 
               total,
               shippingCost,
 
-              status: "PENDING",
-              shippingStatus:
-                "PREPARING",
+              paymentId: null,
+              shippingId: null,
 
               items: {
-                create: validatedItems.map(
-                  ({
-                    product,
-                    quantity,
-                  }) => ({
-                    quantity,
-
-                    price: product.price,
-
-                    subtotal:
-                      product.price *
+                create:
+                  validatedItems.map(
+                    ({
+                      product,
+                      quantity,
+                    }) => ({
                       quantity,
 
-                    productId: product.id,
-                  })
-                ),
+                      price:
+                        product.price,
+
+                      subtotal:
+                        product.price *
+                        quantity,
+
+                      productId:
+                        product.id,
+                    })
+                  ),
               },
             },
 
@@ -192,7 +284,8 @@ export async function POST(req: Request) {
 
                 data: {
                   stock: {
-                    decrement: quantity,
+                    decrement:
+                      quantity,
                   },
                 },
               })
@@ -206,7 +299,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json(order)
   } catch (error: any) {
-    console.error("[ORDERS_POST]", error)
+    console.error(
+      "[ORDERS_POST]",
+      error
+    )
 
     return NextResponse.json(
       {

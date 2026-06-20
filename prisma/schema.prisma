@@ -70,9 +70,6 @@ model Order {
 
   buyerId        String
 
-  status         String?
-  shippingStatus String?
-
   total          Float
   shippingCost   Float
 
