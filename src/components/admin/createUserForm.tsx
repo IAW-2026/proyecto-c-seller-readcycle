@@ -18,7 +18,7 @@ export default function CreateUserForm() {
   const [surname, setSurname] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [role, setRole] = useState("seller")
+  const [role, setRole] = useState("SELLER")
 
   async function handleSubmit() {
     const response = await fetch(
@@ -42,7 +42,7 @@ export default function CreateUserForm() {
       setSurname("")
       setEmail("")
       setPassword("")
-      setRole("seller")
+      setRole("SELLER")
 
       router.refresh()
     }
@@ -89,20 +89,20 @@ export default function CreateUserForm() {
           }
         />
         <NativeSelect.Root>
-            <NativeSelect.Field
-                value={role}
-                onChange={(
-                e: React.ChangeEvent<HTMLSelectElement>
-                ) => setRole(e.target.value)}
-            >
-                <option value="seller">
-                  Seller
-                </option>
+          <NativeSelect.Field
+            value={role}
+            onChange={(
+              e: React.ChangeEvent<HTMLSelectElement>
+            ) => setRole(e.target.value)}
+          >
+            <option value="SELLER">
+              Seller
+            </option>
 
-                <option value="admin">
-                Admin
-                </option>
-            </NativeSelect.Field>
+            <option value="ADMIN">
+              Admin
+            </option>
+          </NativeSelect.Field>
         </NativeSelect.Root>
         <Button
           w="full"

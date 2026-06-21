@@ -87,16 +87,16 @@ export default function AdminEditUserButton({
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <Button
-            size="sm"
-            bg="brand.sage"
-            color="white"
-            borderRadius="lg"
-            w="90px"
-            _hover={{
-                bg: "brand.forest",
-            }}
-            >
-            Editar
+          size="sm"
+          bg="brand.sage"
+          color="white"
+          borderRadius="lg"
+          w="90px"
+          _hover={{
+            bg: "brand.forest",
+          }}
+        >
+          Editar
         </Button>
       </Dialog.Trigger>
       <Portal>
@@ -172,10 +172,10 @@ export default function AdminEditUserButton({
                   </Text>
                   <Checkbox.Root
                     checked={roles.includes(
-                      "admin"
+                      "ADMIN"
                     )}
                     onCheckedChange={() =>
-                      toggleRole("admin")
+                      toggleRole("ADMIN")
                     }
                   >
                     <Checkbox.HiddenInput />
@@ -186,10 +186,10 @@ export default function AdminEditUserButton({
                   </Checkbox.Root>
                   <Checkbox.Root
                     checked={roles.includes(
-                      "seller"
+                      "SELLER"
                     )}
                     onCheckedChange={() =>
-                      toggleRole("seller")
+                      toggleRole("SELLER")
                     }
                   >
                     <Checkbox.HiddenInput />
