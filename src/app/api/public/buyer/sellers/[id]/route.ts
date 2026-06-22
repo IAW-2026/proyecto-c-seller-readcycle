@@ -34,8 +34,6 @@ export async function GET(
         name: true,
         surname: true,
         email: true,
-        createdAt: true,
-        address: true,
       },
     })
 
