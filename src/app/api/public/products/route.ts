@@ -1,7 +1,16 @@
 import prisma from "../../../../lib/prisma"
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    // 1. Authenticate the buyer application
+    const apiKey = req.headers.get("X-API-Key")
+    if (apiKey !== process.env.BUYER_API_KEY) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
     const products = await prisma.product.findMany({
       where: {
         isActive: true,
