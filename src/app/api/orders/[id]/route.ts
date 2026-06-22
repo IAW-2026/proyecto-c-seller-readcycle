@@ -93,7 +93,7 @@ export async function GET(
               headers: {
                 "X-API-Key":
                   process.env
-                    .PAYMENTS_API_KEY!,
+                    .PAYMENTS_OUTBOUND_API_KEY!,
               },
             }
           )
