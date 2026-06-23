@@ -60,6 +60,8 @@ type Order = {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
   const fetchOrders = async () => {
     try {
@@ -87,6 +89,10 @@ export default function OrdersPage() {
   useEffect(() => {
     fetchOrders()
   }, [])
+
+  const totalPages = Math.ceil(orders.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentOrders = orders.slice(startIndex, startIndex + itemsPerPage)
 
   if (loading) {
     return (
@@ -141,13 +147,85 @@ export default function OrdersPage() {
                 color="gray.600"
                 fontSize="lg"
               >
-                Gestiona todas tus órdenes
-                realizadas
+                Gestiona todas tus órdenes realizadas
               </Text>
             </Flex>
           </Flex>
         </Stack>
-        <OrdersList orders={orders} />
+
+        {orders.length === 0 ? (
+          <Flex
+            minH="40vh"
+            align="center"
+            justify="center"
+            px="6"
+            textAlign="center"
+          >
+            <Stack maxW="500px" gap="6">
+              <Text
+                fontSize="3xl"
+                fontWeight="700"
+                color="brand.forest"
+              >
+                No tienes ventas registradas
+              </Text>
+              <Text
+                fontSize="lg"
+                color="gray.600"
+              >
+                Aquí aparecerán las órdenes que realicen los compradores una vez que adquieran tus libros.
+              </Text>
+            </Stack>
+          </Flex>
+        ) : (
+          <>
+            <OrdersList orders={currentOrders} />
+            {totalPages > 1 && (
+              <Flex
+                justify="center"
+                align="center"
+                gap="4"
+                mt="10"
+                flexWrap="wrap"
+              >
+                <Button
+                  onClick={() => {
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                  disabled={currentPage === 1}
+                  bg="brand.forest"
+                  color="white"
+                  _hover={{
+                    bg: "brand.sage",
+                  }}
+                >
+                  Anterior
+                </Button>
+                <Text
+                  fontWeight="600"
+                  color="brand.forest"
+                >
+                  Página {currentPage} de {totalPages}
+                </Text>
+                <Button
+                  onClick={() => {
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                  disabled={currentPage === totalPages}
+                  bg="brand.forest"
+                  color="white"
+                  _hover={{
+                    bg: "brand.sage",
+                  }}
+                >
+                  Siguiente
+                </Button>
+              </Flex>
+            )}
+          </>
+        )}
       </Container>
     </Box>
   )
