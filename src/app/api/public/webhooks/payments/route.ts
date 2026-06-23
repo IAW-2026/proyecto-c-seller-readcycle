@@ -25,6 +25,9 @@ export async function POST(req: Request) {
     // 2. Verify order exists in the database
     const order = await prisma.order.findUnique({
       where: { id: orderId },
+      include: {
+        items: true,
+      },
     })
 
     if (!order) {
@@ -44,14 +47,33 @@ export async function POST(req: Request) {
 
     console.log(`[PAYMENT_WEBHOOK] Updated paymentId to "${paymentId}" for order "${orderId}"`)
 
-    // 4. Create the shipment by calling the external shipments API
+    // 4. Create the shipment by calling the external shipments API or restore stock if cancelled/rejected
     let shippingId: string | null = null
 
     const normalizedStatus = status ? String(status).toUpperCase() : ""
-    const isCancelledOrRejected = normalizedStatus === "cancelled" || normalizedStatus === "rejected"
+    const isCancelledOrRejected = normalizedStatus === "CANCELLED" || normalizedStatus === "REJECTED"
 
     if (isCancelledOrRejected) {
-      console.log(`[PAYMENT_WEBHOOK] Payment status is "${status}". Skipping shipment creation.`)
+      if (order.items && order.items.length > 0) {
+        try {
+          await prisma.$transaction(
+            order.items.map((item) =>
+              prisma.product.update({
+                where: { id: item.productId },
+                data: {
+                  stock: {
+                    increment: item.quantity,
+                  },
+                },
+              })
+            )
+          )
+          console.log(`[PAYMENT_WEBHOOK] Successfully restored stock for order "${orderId}"`)
+        } catch (err: any) {
+          console.error(`[PAYMENT_WEBHOOK] Failed to restore stock for order "${orderId}":`, err.message || err)
+          throw err
+        }
+      }
     } else {
       try {
         const response = await fetch(
