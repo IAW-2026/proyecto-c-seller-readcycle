@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { toaster } from "../../../components/ui/toaster"
 import {
   Alert,
   Box,
@@ -74,13 +75,21 @@ export default function CreateBookPage() {
       })
       const result = await response.json()
       if (!response.ok) {
-        alert(result.error || "Error al crear el libro")
+        toaster.create({
+          title: "Error",
+          description: result.error || "Error al crear el libro",
+          type: "error",
+        })
         return
       }
       router.push("/dashboard")
     } catch (error: any) {
       console.error(error)
-      alert(error.message)
+      toaster.create({
+        title: "Error",
+        description: error.message || "Error al crear el libro",
+        type: "error",
+      })
     }
   }
   if (hasAddress === null) {

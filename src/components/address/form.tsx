@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toaster } from "../ui/toaster"
 
 import {
   Box,
@@ -68,9 +69,18 @@ export function AddressForm() {
         body: JSON.stringify(addressData),
       })
 
-      alert("Dirección guardada correctamente")
+      toaster.create({
+        title: "Éxito",
+        description: "Dirección guardada correctamente",
+        type: "success",
+      })
     } catch (error) {
       console.error(error)
+      toaster.create({
+        title: "Error",
+        description: "Error al guardar la dirección",
+        type: "error",
+      })
     }
   }
   return (
