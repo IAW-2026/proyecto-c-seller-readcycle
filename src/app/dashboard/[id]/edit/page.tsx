@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation" 
+import { toaster } from "../../../../components/ui/toaster" 
 import {
   Alert,
   Box,
@@ -101,7 +102,11 @@ export default function EditBookPage() {
       router.push("/dashboard")
     } catch (error: any) {
       console.error(error)
-      alert(error.message)
+      toaster.create({
+        title: "Error",
+        description: error.message || "Error al actualizar el libro",
+        type: "error",
+      })
     }
   }
 

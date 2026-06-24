@@ -11,9 +11,11 @@ export async function DELETE(
     }>
   }
 ) {
+  const apiKey = req.headers.get("X-API-Key")
+  const hasValidApiKey = apiKey && apiKey === process.env.ADMIN_API_KEY
   const admin = await isAdmin()
 
-  if (!admin) {
+  if (!admin && !hasValidApiKey) {
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 401 }

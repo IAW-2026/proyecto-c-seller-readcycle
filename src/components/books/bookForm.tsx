@@ -24,6 +24,7 @@ import {
 } from "react-icons/lu"
 
 import { supabase } from "../../lib/supabase"
+import { toaster } from "../ui/toaster"
 
 export interface Category {
   id: string
@@ -164,7 +165,11 @@ export function BookForm({
       !formData.categoryId ||
       !formData.weight
     ) {
-      alert("Por favor, completa los campos obligatorios.")
+      toaster.create({
+        title: "Campos obligatorios",
+        description: "Por favor, completa los campos obligatorios.",
+        type: "error",
+      })
       return
     }
 
@@ -189,7 +194,11 @@ export function BookForm({
 
     } catch (error) {
       console.error(error)
-      alert("Error al crear la publicación")
+      toaster.create({
+        title: "Error",
+        description: "Error al crear la publicación",
+        type: "error",
+      })
     } finally {
       setLoading(false)
     }

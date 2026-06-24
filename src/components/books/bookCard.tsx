@@ -12,6 +12,7 @@ import {
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import ConfirmDialog from "../ui/confirmDialog"
 
 interface BookCardProps {
   id: string
@@ -38,15 +39,10 @@ export default function BookCard({
 }: BookCardProps) {
 
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const router = useRouter()
 
   async function handleDelete() {
-
-    const confirmDelete = confirm(
-      "¿Estás seguro de eliminar este libro?"
-    )
-
-    if (!confirmDelete) return
     try {
       setIsDeleting(true)
       await fetch(`/api/products?id=${id}`, {
@@ -57,6 +53,7 @@ export default function BookCard({
       console.error(error)
     } finally {
       setIsDeleting(false)
+      setIsConfirmOpen(false)
     }
   }
 
@@ -215,7 +212,7 @@ export default function BookCard({
             color="brand.beige"
             borderRadius="xl"
             fontWeight="600"
-            onClick={handleDelete}
+            onClick={() => setIsConfirmOpen(true)}
             loading={isDeleting}
           >
             Eliminar
@@ -237,6 +234,16 @@ export default function BookCard({
           </Button>
         )}
       </Card.Footer>
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title="Eliminar Libro"
+        description="¿Estás seguro de eliminar este libro?"
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        loading={isDeleting}
+      />
     </Card.Root>
   )
 }
