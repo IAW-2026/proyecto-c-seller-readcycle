@@ -111,7 +111,7 @@ export async function GET(
               headers: {
                 "X-API-Key":
                   process.env
-                    .SHIPPING_API_KEY!,
+                    .SHIPPING_OUTBOUND_API_KEY!,
               },
             }
           )

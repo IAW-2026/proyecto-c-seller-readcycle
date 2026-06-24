@@ -73,7 +73,7 @@ export async function GET(
               `${process.env.SHIPPING_API_URL}/api/shipments/${order.shippingId}`,
               {
                 headers: {
-                  "X-API-Key": process.env.SHIPPING_API_KEY!,
+                  "X-API-Key": process.env.SHIPPING_OUTBOUND_API_KEY!,
                 },
               }
             )
