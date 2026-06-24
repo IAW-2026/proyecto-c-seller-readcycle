@@ -5,7 +5,7 @@ export async function GET(req: Request) {
     try {
         // 1. Authenticate the buyer application
         const apiKey = req.headers.get("X-API-Key")
-        if (apiKey !== process.env.ADMIN_API_KEY) {
+        if (apiKey !== process.env.ANALYTICS_API_KEY) {
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }
