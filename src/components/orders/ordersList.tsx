@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Card,
   Flex,
   Heading,
@@ -116,7 +117,7 @@ export function OrdersList({
                   color="white"
                 >
                   {order.paymentStatus ??
-                    "SIN PAGO"}
+                    "WITHOUT PAYMENT"}
                 </Badge>
 
                 <Badge
@@ -127,7 +128,7 @@ export function OrdersList({
                   color="white"
                 >
                   {order.shippingStatus ??
-                    "SIN ENVÍO"}
+                    "WITHOUT SENDING"}
                 </Badge>
               </HStack>
             </Flex>
@@ -137,88 +138,90 @@ export function OrdersList({
               align="stretch"
               gap={6}
             >
-              <BoxInfo
-                label="Buyer ID"
-                value={order.buyerId}
-              />
-              <SimpleGrid
-                columns={{
-                  base: 1,
-                  lg: 2,
-                }}
-                gap={4}
+              <Box
+                maxH={{ base: "360px", lg: "185px" }}
+                overflowY="auto"
+                pr={2}
               >
-                {order.items.map((item) => {
-                  const primaryImage =
-                    item.product.images.find(
-                      (image) => image.isPrimary
-                    )?.url ?? item.product.images[0]?.url ??"https://placehold.co/120x160"
-                  return (
-                    <Card.Root
-                      key={item.id}
-                      bg="brand.beige"
-                      borderRadius="brand"
-                    >
-                      <Card.Body>
-                        <HStack
-                          align="start"
-                          gap={4}
-                        >
-                          <Image
-                            src={primaryImage}
-                            alt={item.product.title}
-                            w="90px"
-                            h="120px"
-                            objectFit="cover"
-                            borderRadius="lg"
-                          />
-                          <Stack flex={1}>
-                            <Heading
-                              size="sm"
-                              color="brand.forest"
-                            >
-                              {item.product.title}
-                            </Heading>
-                            <Text
-                              fontSize="sm"
-                              color="gray.600"
-                              lineClamp={3}
-                            >
-                              {item.product.description}
-                            </Text>
-                            <Badge
-                              w="fit-content"
-                              bg="brand.sand"
-                              color="brand.forest"
-                            >
-                              {item.product.category.name}
-                            </Badge>
-                            <HStack
-                              justify="space-between"
-                              mt={2}
-                            >
-                              <Text
-                                fontWeight="bold"
-                                color="brand.sage"
+                <SimpleGrid
+                  columns={{
+                    base: 1,
+                    lg: 2,
+                  }}
+                  gap={4}
+                >
+                  {order.items.map((item) => {
+                    const primaryImage =
+                      item.product.images.find(
+                        (image) => image.isPrimary
+                      )?.url ?? item.product.images[0]?.url ?? "https://placehold.co/120x160"
+                    return (
+                      <Card.Root
+                        key={item.id}
+                        bg="brand.beige"
+                        borderRadius="brand"
+                      >
+                        <Card.Body>
+                          <HStack
+                            align="start"
+                            gap={4}
+                          >
+                            <Image
+                              src={primaryImage}
+                              alt={item.product.title}
+                              w="90px"
+                              h="120px"
+                              objectFit="cover"
+                              borderRadius="lg"
+                            />
+                            <Stack flex={1}>
+                              <Heading
+                                size="sm"
+                                color="brand.forest"
                               >
-                                $
-                                {item.subtotal}
-                              </Text>
+                                {item.product.title}
+                              </Heading>
                               <Text
                                 fontSize="sm"
-                                color="gray.500"
+                                color="gray.600"
+                                lineClamp={3}
                               >
-                                x
-                                {item.quantity}
+                                {item.product.description}
                               </Text>
-                            </HStack>
-                          </Stack>
-                        </HStack>
-                      </Card.Body>
-                    </Card.Root>
-                  )
-                })}
-              </SimpleGrid>
+                              <Badge
+                                w="fit-content"
+                                bg="brand.sand"
+                                color="brand.forest"
+                              >
+                                {item.product.category.name}
+                              </Badge>
+                              <HStack
+                                justify="space-between"
+                                mt={2}
+                              >
+                                <Text
+                                  fontWeight="bold"
+                                  color="brand.sage"
+                                >
+                                  $
+                                  {item.subtotal}
+                                </Text>
+                                <Text
+                                  fontSize="sm"
+                                  color="gray.500"
+                                >
+                                  x
+                                  {item.quantity}
+                                </Text>
+                              </HStack>
+                            </Stack>
+                          </HStack>
+                        </Card.Body>
+                      </Card.Root>
+                    )
+                  })}
+                </SimpleGrid>
+              </Box>
               <Flex
                 justify="space-between"
                 align="center"
@@ -230,19 +233,6 @@ export function OrdersList({
                   align="start"
                   gap={0}
                 >
-                  <Text
-                    color="gray.500"
-                    fontSize="sm"
-                  >
-                    Envío
-                  </Text>
-
-                  <Text
-                    fontWeight="semibold"
-                    color="brand.forest"
-                  >
-                    ${order.shippingCost}
-                  </Text>
                 </VStack>
                 <VStack
                   align="end"
