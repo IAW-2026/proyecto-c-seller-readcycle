@@ -1,0 +1,91 @@
+import { clerkClient } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
+
+import  prisma  from "../../../../../lib/prisma"
+import { isAdmin } from "../../../../../lib/isAdmin"
+
+export async function DELETE(
+  req: Request,
+  context: {
+    params: Promise<{
+      id: string
+    }>
+  }
+) {
+  const admin = await isAdmin()
+
+  if (!admin) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    )
+  }
+
+  const params = await context.params
+
+  const client = await clerkClient()
+
+  await client.users.deleteUser(params.id)
+
+  await prisma.user.deleteMany({
+    where: {
+      clerkUserId: params.id,
+    },
+  })
+
+  return NextResponse.json({
+    success: true,
+  })
+}
+
+export async function PUT(
+  req: Request,
+  context: {
+    params: Promise<{
+      id: string
+    }>
+  }
+) {
+  const admin = await isAdmin()
+
+  if (!admin) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    )
+  }
+
+  const params = await context.params
+
+  const body = await req.json()
+
+  const {
+    firstName,
+    lastName,
+    roles,
+  } = body
+
+  const client = await clerkClient()
+
+  await client.users.updateUser(params.id, {
+    firstName,
+    lastName,
+    publicMetadata: {
+      roles,
+    },
+  })
+
+  await prisma.user.updateMany({
+    where: {
+      clerkUserId: params.id,
+    },
+    data: {
+      name: firstName,
+      surname: lastName,
+    },
+  })
+
+  return NextResponse.json({
+    success: true,
+  })
+}

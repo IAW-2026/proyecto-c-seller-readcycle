@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String    @id @default(cuid())
+  clerkUserId String    @unique
+  name        String
+  surname     String
+  email       String    @unique
+  address     Address?
+  products    Product[]
+  orders      Order[]
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String    @id @default(cuid()) 
+  title       String
+  author      String?
+  description String
+  price       Float
+  stock       Int
+  weight      Float
+  sellerId    String
+  seller      User           @relation(fields: [sellerId], references: [id])
+  images      ProductImage[]
+  categoryId  String
+  category    Category       @relation(fields: [categoryId], references: [id])
+
+  isActive  Boolean  @default(true)
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+}
+
+model ProductImage {
+  id        String    @id @default(cuid())
+  url       String
+  isPrimary Boolean @default(false)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[]
+}
+
+model Order {
+  id             String    @id @default(cuid())
+
+  sellerId       String
+  seller         User   @relation(fields: [sellerId], references: [id])
+
+  buyerId        String
+
+  total          Float
+  shippingCost   Float
+
+  paymentId      String?
+  shippingId     String?
+
+  items          OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String    @id @default(cuid())
+  quantity  Int
+  price     Float
+  subtotal  Float
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Address {
+  id       String    @id @default(cuid())
+  province String
+  city     String
+  street   String
+  number   Int
+  zipCode  String
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
